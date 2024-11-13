@@ -1,6 +1,6 @@
 ﻿namespace E_Commerce.API.Models.DomainModels
 {
-    internal class Role
+    public class Role
     {
         public Role(string name, string description, int priorityPoints)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace E_Commerce.API.Data.Db
 {
-    internal class ECommerceDbContext : DbContext
+    public class ECommerceDbContext : DbContext
     {
         public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options) : base(options) { }
 

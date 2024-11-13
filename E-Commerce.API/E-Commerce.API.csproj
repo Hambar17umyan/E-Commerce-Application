@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation.ValidatorAttribute" Version="8.6.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
@@ -24,11 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Repositories\" />
-    <Folder Include="Models\DTOs\" />
-    <Folder Include="Models\RequestModels\" />
     <Folder Include="Models\ResponseModels\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

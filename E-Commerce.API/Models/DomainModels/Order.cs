@@ -1,6 +1,6 @@
 ﻿namespace E_Commerce.API.Models.DomainModels
 {
-    internal class Order
+    public class Order
     {
         public Order(User user)
         {

@@ -1,6 +1,6 @@
 ﻿namespace E_Commerce.API.Models.DomainModels
 {
-    internal class LineItem
+    public class LineItem
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public LineItem() { }
@@ -21,7 +21,8 @@
         {
             get
             {
-                return Quantity * Product.Price;
+                ///TODO..
+                return Quantity * Product?.Price ?? 0;
             }
             set
             {

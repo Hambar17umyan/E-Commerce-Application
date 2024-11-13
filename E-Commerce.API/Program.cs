@@ -1,5 +1,11 @@
 
 using E_Commerce.API.Data.Db;
+using E_Commerce.API.Validators;
+using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using E_Commerce.API.Models.RequestModels;
+using E_Commerce.API.Services;
+using E_Commerce.API.Data.Repositories;
 
 namespace E_Commerce.API
 {
@@ -18,6 +24,8 @@ namespace E_Commerce.API
 
             builder.Services.AddSqlServer<ECommerceDbContext>(builder.Configuration.GetConnectionString("Default Connection"));
 
+            ConfigureServices(builder.Services);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -35,6 +43,14 @@ namespace E_Commerce.API
             app.MapControllers();
 
             app.Run();
+        }
+
+        public static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddScoped<RegistrationModelValidator>();
+            services.AddScoped<PasswordHashingService>();
+            services.AddScoped<RoleManagementService>();
+            services.AddScoped<UserDataRepository>();
         }
     }
 }
