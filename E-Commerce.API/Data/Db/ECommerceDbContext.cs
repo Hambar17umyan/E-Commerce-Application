@@ -35,6 +35,11 @@ namespace E_Commerce.API.Data.Db
             modelBuilder.Entity<Role>(rb =>
             {
                 rb.HasKey(r => r.Id);
+                rb.HasData(
+                    new Role { Id = 1, Name = "Admin", Description = "Administrator with full access", Priority = 1 },
+                    new Role { Id = 2, Name = "User", Description = "Regular user with limited access", Priority = -1 }
+                    );
+
             });
             modelBuilder.Entity<Order>(ob =>
             {

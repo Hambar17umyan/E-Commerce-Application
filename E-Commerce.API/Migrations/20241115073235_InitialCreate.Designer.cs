@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce.API.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    [Migration("20241113140452_FluentFullConf")]
-    partial class FluentFullConf
+    [Migration("20241115073235_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,12 +129,28 @@ namespace E_Commerce.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PriorityPoints")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Administrator with full access",
+                            Name = "Admin",
+                            Priority = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Regular user with limited access",
+                            Name = "User",
+                            Priority = -1
+                        });
                 });
 
             modelBuilder.Entity("E_Commerce.API.Models.DomainModels.User", b =>
@@ -149,6 +165,10 @@ namespace E_Commerce.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -156,7 +176,7 @@ namespace E_Commerce.API.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

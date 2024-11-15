@@ -2,7 +2,7 @@
 {
     public class PasswordHashingService
     {
-        public string Hash(string password)
+        public string Hash(string? password)
         {
             return BCrypt.Net.BCrypt.EnhancedHashPassword(password, 13);
         }

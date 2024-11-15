@@ -28,6 +28,7 @@ namespace E_Commerce.API.Validators
 
             RuleFor(reg => reg.Email)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty()
                 .EmailAddress()
                 .WithMessage("Email address is not valid!")
                 .Must(email =>
@@ -36,6 +37,7 @@ namespace E_Commerce.API.Validators
 
             RuleFor(reg => reg.Password)
                 .Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty()
                 .Must(pass => passwordVal.Match(pass).Success)
                 .WithMessage("Password is in a wrong format! It should: \r\n\r\n1) Have minimum 8 characters in length. Adjust it by modifying {8,}\r\n\r\n2) Have at least one uppercase English letter. You can remove this condition by removing (?=.*?[A-Z])\r\n\r\n3) Have at least one lowercase English letter.  You can remove this condition by removing (?=.*?[a-z])\r\n\r\n4) Have at least one digit. You can remove this condition by removing (?=.*?[0-9])) \r\n\r\n5) Have at least one special character,  You can remove this condition by removing (?=.*?[#?!@$%^&*-])");
         }

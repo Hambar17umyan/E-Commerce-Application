@@ -6,6 +6,10 @@ using FluentValidation;
 using E_Commerce.API.Models.RequestModels;
 using E_Commerce.API.Services;
 using E_Commerce.API.Data.Repositories;
+using System.Runtime;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace E_Commerce.API
 {
@@ -23,7 +27,19 @@ namespace E_Commerce.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSqlServer<ECommerceDbContext>(builder.Configuration.GetConnectionString("Default Connection"));
-
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["JWT:Audiance"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+                };
+            });
             ConfigureServices(builder.Services);
 
             var app = builder.Build();
@@ -49,8 +65,9 @@ namespace E_Commerce.API
         {
             services.AddScoped<RegistrationModelValidator>();
             services.AddScoped<PasswordHashingService>();
-            services.AddScoped<RoleManagementService>();
+            services.AddSingleton<RoleManagementService>();
             services.AddScoped<UserDataRepository>();
+            services.AddScoped<JwtService>();
         }
     }
 }

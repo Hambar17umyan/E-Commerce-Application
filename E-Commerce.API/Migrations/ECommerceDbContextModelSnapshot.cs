@@ -126,12 +126,28 @@ namespace E_Commerce.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PriorityPoints")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Administrator with full access",
+                            Name = "Admin",
+                            Priority = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Regular user with limited access",
+                            Name = "User",
+                            Priority = -1
+                        });
                 });
 
             modelBuilder.Entity("E_Commerce.API.Models.DomainModels.User", b =>

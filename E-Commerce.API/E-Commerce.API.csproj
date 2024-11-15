@@ -29,4 +29,6 @@
     <Folder Include="Models\ResponseModels\" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>

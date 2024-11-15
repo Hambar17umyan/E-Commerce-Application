@@ -4,10 +4,11 @@ namespace E_Commerce.API.Services
 {
     public class RoleManagementService
     {
+        private static Role Admin = new Role() { Name = "Admin", Priority = 1, Description = "aaa" };
         public Role GetAdmin()
         {
-            //TODO..
-            return new Role() { Name = "Admin", PriorityPoints = 1, Description = "aaa"};
+            ///TODO..
+            return Admin;
         }
     }
 }
