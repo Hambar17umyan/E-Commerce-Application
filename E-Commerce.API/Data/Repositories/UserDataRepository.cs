@@ -14,18 +14,19 @@ namespace E_Commerce.API.Data.Repositories
         }
         private ECommerceDbContext _context;
 
-        public async Task AddAsync(User user)
+        public async Task<ResponseModel> AddAsync(User user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+            return ResponseModel.GetSuccess();
         }
         public IQueryable<User> GetAllAsQueryable()
         {
             return _context.Users;
         }
-        public async Task<ResponseModel<User>> GetByAsync(Func<User, bool> predicate)
+        public ResponseModel<User> GetBy(Func<User, bool> predicate)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => predicate(x));
+            var user = _context.Users.AsEnumerable<User>().FirstOrDefault(x => predicate(x));
             if (user == null)
             {
                 return ResponseModel<User>.GetFail(ResponseCode.NotFound, "User not found!");
@@ -35,24 +36,15 @@ namespace E_Commerce.API.Data.Repositories
                 return ResponseModel<User>.GetSuccess(user);
             }
         }
-        public async Task<ResponseModel> RemoveAsync(int id)
+        public async Task<ResponseModel> RemoveAsync(User user)
         {
-            var resp = await GetByAsync(x=>x.Id == id);
-            var user = resp.Result;
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                return ResponseModel.GetSuccess();
-            }
-            else
-            {
-                return ResponseModel.GetFail(resp.Code, resp.Message);
-            }
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return ResponseModel.GetSuccess();
         }
-        public async Task<ResponseModel> UpdateAsync(int id, Action<User> action)
+        public async Task<ResponseModel> UpdateAsync(Func<User, bool> predicate, Action<User> action)
         {
-            var resp = await GetByAsync(x => x.Id == id);
+            var resp = GetBy(predicate);
             if (resp.Result != null)
             {
                 action(resp.Result);

@@ -1,33 +1,36 @@
 ﻿using E_Commerce.API.Models.DTOs.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace E_Commerce.API.Models.DTOs
 {
     public class ResponseModel<TResult>
     {
-        public ResponseModel(bool isSuccess, ResponseCode code, string? message = null, TResult? result = default)
+        private ResponseModel(TResult? result, string? message, ResponseCode code)
         {
-            Code = code;
-            IsSuccess = isSuccess;
             Result = result;
             Message = message;
+            Code = code;
         }
 
-        public bool IsSuccess { get; }
-        public TResult? Result { get; }
-        public string? Message { get; }
-        public ResponseCode Code { get; }
+        public bool IsSuccess => Result == null;
+        public readonly TResult? Result;
+        public readonly string? Message;
+        public readonly ResponseCode Code;
 
         public static ResponseModel<TResult> GetSuccess(TResult result, string? message = "All is ok!")
         {
-            return new(true, ResponseCode.OK, message, result);
+            if(result == null)
+                throw new ArgumentNullException("A success should have a Result!");
+
+            return new(result, message, ResponseCode.OK);
         }
         public static ResponseModel<TResult> GetFail(string? message = null)
         {
-            return new(false, ResponseCode.NotSpecified, message);
+            return new(default, message, ResponseCode.NotSpecified);
         }
         public static ResponseModel<TResult> GetFail(ResponseCode responseCode, string? message = null)
         {
-            return new(false, responseCode, message);
+            return new(default, message, responseCode);
         }
     }
 }

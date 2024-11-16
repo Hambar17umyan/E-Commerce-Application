@@ -5,16 +5,16 @@ namespace E_Commerce.API.Models.DTOs
 {
     public class ResponseModel
     {
-        public ResponseModel(bool isSuccess, ResponseCode code, string? message = null)
+        private ResponseModel(bool isSuccess, ResponseCode code, string? message = null)
         {
             Code = code;
             IsSuccess = isSuccess;
             Message = message;
         }
 
-        public bool IsSuccess { get; }
-        public string? Message { get; }
-        public ResponseCode Code { get; }
+        public readonly bool IsSuccess;
+        public readonly string? Message;
+        public readonly ResponseCode Code;
 
         public static ResponseModel GetSuccess(string? message = "All is ok!")
         {

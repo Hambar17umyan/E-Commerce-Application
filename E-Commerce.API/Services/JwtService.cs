@@ -12,7 +12,12 @@ namespace E_Commerce.API.Services
 {
     public class JwtService
     {
-        public string Generate(User user, IConfiguration _config)
+        private IConfiguration _config;
+        public JwtService(IConfiguration configuration)
+        {
+            _config = configuration;
+        }
+        public string Generate(User user)
         {
             string keyString = _config["JWT:Key"] ?? throw new NullReferenceException("There is something wrong with configurations.");
             string issuerString = _config["JWT:Issuer"] ?? throw new NullReferenceException("There is something wrong with configurations.");

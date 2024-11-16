@@ -4,6 +4,7 @@
     {
         NotSpecified = 0,
         OK = 200,
-        NotFound = 404
+        NotFound = 404,
+        WrongPassword = 17401
     }
 }

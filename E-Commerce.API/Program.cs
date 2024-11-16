@@ -64,10 +64,12 @@ namespace E_Commerce.API
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<RegistrationModelValidator>();
+            services.AddScoped<LoginModelValidator>();
             services.AddScoped<PasswordHashingService>();
             services.AddSingleton<RoleManagementService>();
             services.AddScoped<UserDataRepository>();
             services.AddScoped<JwtService>();
+            services.AddScoped<UserDataService>();
         }
     }
 }

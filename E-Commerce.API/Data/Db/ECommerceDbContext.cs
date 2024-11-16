@@ -11,10 +11,10 @@ namespace E_Commerce.API.Data.Db
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        //public DbSet<Product> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
-        //public DbSet<LineItem> LineItems { get; set; }
-        //public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<LineItem> LineItems { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,10 +35,6 @@ namespace E_Commerce.API.Data.Db
             modelBuilder.Entity<Role>(rb =>
             {
                 rb.HasKey(r => r.Id);
-                rb.HasData(
-                    new Role { Id = 1, Name = "Admin", Description = "Administrator with full access", Priority = 1 },
-                    new Role { Id = 2, Name = "User", Description = "Regular user with limited access", Priority = -1 }
-                    );
 
             });
             modelBuilder.Entity<Order>(ob =>
