@@ -1,17 +1,11 @@
-﻿using E_Commerce.API.Models.DomainModels;
-using E_Commerce.API.Models.DTOs;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.JsonWebTokens;
+﻿using API.Models.Domain;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace E_Commerce.API.Services
-{/// <summary>
-/// /////////////////////
-/// </summary>
+namespace API.Services.Control
+{
     public class JwtService
     {
         private IConfiguration _config;
