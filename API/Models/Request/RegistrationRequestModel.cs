@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using FluentResults;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Models.Request
 {
-    public class RegistrationRequestModel : IRequest<IActionResult>
+    public class RegistrationRequestModel : IRequest<Result>
     {
         public RegistrationRequestModel(string firstName, string lastName, string email, string password)
         {

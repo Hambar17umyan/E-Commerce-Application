@@ -2,6 +2,7 @@
 using API.Behaviors;
 using API.Data.Db;
 using API.Data.Repositories;
+using API.RequestHandlers;
 using API.Services.Control;
 using API.Services.DataServices;
 using API.Validators;
@@ -25,10 +26,12 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            ConfigureMediatR(builder);
             ConfigureAuthentication(builder);
             ConfigureServices(builder);
             ConfigureSql(builder);
             ConfigureValidators(builder);
+            ConfigureAuthorization(builder);
 
             var app = builder.Build();
 
@@ -55,6 +58,12 @@ namespace API
                 .AddScoped<PasswordHashingService>()
                 .AddScoped<RoleDataService>()
                 .AddScoped<UserDataService>();
+        }
+
+        public static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
+        {
+            return builder.Services.AddMediatR(typeof(RegistrationRequestHandler).Assembly);
+
         }
 
         public static IServiceCollection ConfigureSql(WebApplicationBuilder builder)
@@ -84,6 +93,15 @@ namespace API
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
                         };
                     });
+        }
+
+        public static void ConfigureAuthorization(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy =>
+                    policy.RequireRole("Admin"));
+            });
         }
     }
 }

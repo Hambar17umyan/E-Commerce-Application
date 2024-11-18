@@ -1,6 +1,9 @@
-﻿namespace API.Models.Request
+﻿using FluentResults;
+using MediatR;
+
+namespace API.Models.Request
 {
-    public class LoginRequestModel
+    public class LoginRequestModel : IRequest<Result<string>>
     {
         public LoginRequestModel(string email, string password)
         {

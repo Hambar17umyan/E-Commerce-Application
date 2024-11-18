@@ -12,7 +12,9 @@ namespace API.Validators
                 .NotEmpty()
                 .WithMessage("The email is empty!");
 
-            RuleFor(x => x.Password);
+            RuleFor(x => x.Password)
+                .NotEmpty()
+                .WithMessage("The password is empty!");
         }
     }
 }

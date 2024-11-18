@@ -1,5 +1,6 @@
 ﻿using API.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace API.Data.Db
 {
@@ -73,7 +74,7 @@ namespace API.Data.Db
             mb.Entity<Order>(ob =>
             {
                 ob.HasKey(o => o.Id);
-                ob.Property(o=>o.Id).ValueGeneratedOnAdd();
+                ob.Property(o => o.Id).ValueGeneratedOnAdd();
 
                 ob.HasOne(o => o.User)
                 .WithMany(u => u.Orders)
@@ -90,7 +91,7 @@ namespace API.Data.Db
             mb.Entity<Role>(rb =>
             {
                 rb.HasKey(r => r.Id);
-                rb.Property(r=>r.Id).ValueGeneratedOnAdd();
+                rb.Property(r => r.Id).ValueGeneratedOnAdd();
             });
 
             mb.Entity<User>(ub =>

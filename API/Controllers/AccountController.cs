@@ -3,6 +3,7 @@ using API.Models.Request;
 using API.Services.Control;
 using API.Services.DataServices;
 using API.Validators;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -12,69 +13,34 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
-        private IConfiguration _config;
-        private RegistrationModelValidator _registrationModelValidator;
-        private PasswordHashingService _passwordHasher;
-        private RoleDataService _roleManager;
-        private PasswordHashingService _passwordHashingService;
-        private JwtService _jwtService;
-        private UserDataService _userDataService;
-        private LoginModelValidator _loginModelValidator;
-        public AccountController(RegistrationModelValidator registrationModelValidator, PasswordHashingService passwordHasher, RoleDataService roleManager, PasswordHashingService passwordHashingService, IConfiguration config, JwtService jwtService, UserDataService userDataService, LoginModelValidator loginModelValidator)
+        IMediator _mediator;
+
+        public AccountController(IMediator mediator)
         {
-            _registrationModelValidator = registrationModelValidator;
-            _passwordHasher = passwordHasher;
-            _roleManager = roleManager;
-            _passwordHashingService = passwordHashingService;
-            _config = config;
-            _jwtService = jwtService;
-            _userDataService = userDataService;
-            _loginModelValidator = loginModelValidator;
+            _mediator = mediator;
         }
 
         [HttpPost]
         [Route("/register")]
         public async Task<IActionResult> RegisterAsync(RegistrationRequestModel request)
         {
-            var validation = await _registrationModelValidator.ValidateAsync(request);
-            if (validation.IsValid)
-            {
-                await _userDataService.AddAsync(new()
-                {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Email = request.Email,
-                    HashedPassword = _passwordHasher.Hash(request.Password),
-                    IsActive = true,
-                    Roles = new List<Role>() { _roleManager.GetCustomer() }
-                });
-                return Ok();
-            }
-
-            return BadRequest(validation.Errors.Aggregate(new StringBuilder(), (curr, next) => curr.Append(next.ErrorMessage)).ToString());
+            var res = await _mediator.Send(request);
+            return res.IsSuccess ?
+                Ok() :
+                BadRequest(res.Errors[0].Message);
         }
 
-        //[HttpPost]
-        //[Route("/login")]
-        //public async Task<IActionResult> LoginAsync(LoginRequestModel request)
-        //{
-        //    var validation = await _loginModelValidator.ValidateAsync(request);
-        //    if (validation.IsValid)
-        //    {
-        //        var response = _userDataService.Authenticate(request.Email, request.Password);
-        //        if (response.Result is not null)
-        //        {
-        //            var token = _jwtService.Generate(response.Result);
-        //            HttpContext.Response.Headers.Append("Auth", token);
-        //            return Ok(token);
-        //        }
-        //        else
-        //        {
-        //            return BadRequest(response.Message);
-        //        }
-        //    }
-
-        //    return BadRequest(validation.Errors.Aggregate(new StringBuilder(), (curr, next) => curr.Append(next.ErrorMessage)).ToString());
-        //}
+        [HttpPost]
+        [Route("/login")]
+        public async Task<IActionResult> LoginAsync(LoginRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                HttpContext.Response.Headers.Append("Auth", res.Value);
+                return Ok(res.Value);
+            }
+            return BadRequest(res.Errors[0].Message);
+        }
     }
 }

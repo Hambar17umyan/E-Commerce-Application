@@ -32,7 +32,7 @@ namespace API.Services.DataServices
             if (resp.IsSuccess)
             {
                 var user = resp.Value;
-                if (_passwordHashingService.Verify(password, user.HashedPassword))
+                if (_passwordHashingService.Verify(password, user.PasswordHash))
                 {
                     return Result.Ok(user);
                 }

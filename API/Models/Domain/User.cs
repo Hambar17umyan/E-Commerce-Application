@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Models.Domain
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
+        public override int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
-        public string HashedPassword { get; set; }
+        public override string Email { get; set; }
+        public override string PasswordHash { get; set; }
         public bool IsActive { get; set; }
         public ICollection<Role> Roles { get; set; }
         public ICollection<Order> Orders { get; set; } = new List<Order>();

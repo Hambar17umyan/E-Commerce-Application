@@ -19,19 +19,16 @@ namespace API.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (_validators.Any())
+            if (!_validators.Any())
                 return await next();
 
-            var fails = _validators
-                .Select(x => x.Validate(request))
-                .SelectMany(x => x.Errors)
-                .Where(x => x is not null)
-                .Distinct()
-                .ToArray();
-                
-            if(fails.Any())
+            foreach (var validator in _validators)
             {
-                return CreateValidationResult(fails);
+                var res = validator.Validate(request);
+                if (!res.IsValid)
+                {
+                    return Result.Fail(res.Errors.First().ToString()) as TResponse;
+                }
             }
 
             return await next();
