@@ -1,6 +1,6 @@
 ﻿using API.Models.Request;
-using API.Services.Control;
-using API.Services.DataServices;
+using API.Services.Concrete.Control;
+using API.Services.Concrete.DataServices;
 using FluentResults;
 using MediatR;
 

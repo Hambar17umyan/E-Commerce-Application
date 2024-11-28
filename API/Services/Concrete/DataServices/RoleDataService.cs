@@ -1,6 +1,6 @@
 ﻿using API.Models.Domain;
 
-namespace API.Services.DataServices
+namespace API.Services.Concrete.DataServices
 {
     public class RoleDataService
     {

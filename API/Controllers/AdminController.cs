@@ -1,6 +1,6 @@
 ﻿using API.Data.Repositories;
 using API.Models.Request;
-using API.Services.DataServices;
+using API.Services.Concrete.DataServices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

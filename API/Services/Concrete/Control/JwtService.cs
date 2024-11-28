@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace API.Services.Control
+namespace API.Services.Concrete.Control
 {
     public class JwtService
     {
@@ -32,7 +32,7 @@ namespace API.Services.Control
                 new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Email, user.Email)
             };
 
-            foreach(var role in user.Roles)
+            foreach (var role in user.Roles)
             {
                 claims.Add(new(ClaimTypes.Role, role.Name));
             }
