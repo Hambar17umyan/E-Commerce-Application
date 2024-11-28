@@ -24,7 +24,12 @@ namespace API.Services.DataServices
         {
             return _repo.GetBy(x => x.Email == email);
         }
-        public Result<User> GetBy(Func<User, bool> predicate) => _repo.GetBy(predicate);
+        public Result<User> GetBy(Func<User, bool> predicate) => _repo.GetBy(predicate); 
+        public Result<IEnumerable<User>> GetAll()
+        {
+            var users = _repo.GetAll();
+            return Result.Ok(users);
+        }
         public Result<User> Authenticate(string email, string password)
         {
             var resp = GetByEmail(email);
@@ -72,5 +77,6 @@ namespace API.Services.DataServices
         public async Task<Result> UpdateAsync(int id, Action<User> action) => await UpdateAsync(x => x.Id == id, action);
         public async Task<Result> UpdateAsync(string email, Action<User> action) => await UpdateAsync(x => x.Email == email, action);
         public async Task<Result> AddAsync(User user) => await _repo.AddAsync(user);
+        
     }
 }

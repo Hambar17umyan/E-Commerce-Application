@@ -9,7 +9,6 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Policy = "AdminOnly")]
     public class Development : ControllerBase
     {
         ECommerceDbContext _context;
@@ -26,6 +25,8 @@ namespace API.Controllers
         }
 
         [HttpDelete]
+        //[AllowAnonymous]
+       // [Authorize(Roles = "Admin")]
         public async Task RemoveDataFromDbAsync()
         {
             _context.Inventories.RemoveRange(_context.Inventories);
@@ -37,26 +38,40 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
         }
 
+        [HttpPost]
+        [Route("/AdminCheck")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Beep()
+        {
+            Console.Beep();
+            return Ok();
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> HelloAsync()
-        //{
-        //    var a = new User()
-        //    {
-        //        FirstName = "Sergey",
-        //        LastName = "Hambardzumyan",
-        //        Email = "hambardzumyanserg17@gmail.com",
-        //        PasswordHash = _passwordHashingService.Hash("Admin12345678!"),
-        //        Cart = new(),
-        //        Roles = new List<Role>()
-        //        {
-        //            _roleDataService.GetAdmin()
-        //        },
-        //        Orders = new List<Order>(),
-        //        IsActive = true
-        //    };
-        //    return Ok((await _userDataService.AddAsync(a)).IsSuccess);
-        //}
+
+        [HttpPost]
+        public async Task<IActionResult> HelloAsync()
+        {
+            var a = new User()
+            {
+                FirstName = "Sergey",
+                LastName = "Hambardzumyan",
+                Email = "hambardzumyanserg17@gmail.com",
+                PasswordHash = _passwordHashingService.Hash("Admin12345678!"),
+                Cart = new(),
+                Roles = new List<Role>()
+                {
+                    new Role()
+                    {
+                        Name = "Admin",
+                        Description = "Es sagh karam",
+                        Priority = 1
+                    }
+                },
+                Orders = new List<Order>(),
+                IsActive = true
+            };
+            return Ok((await _userDataService.AddAsync(a)).IsSuccess);
+        }
     }
 
 }

@@ -17,7 +17,7 @@ namespace API.Services.Control
         {
             string keyString = _config["JWT:Key"] ?? throw new NullReferenceException("There is something wrong with configurations.");
             string issuerString = _config["JWT:Issuer"] ?? throw new NullReferenceException("There is something wrong with configurations.");
-            string audienceString = _config["JWT:Key"] ?? throw new NullReferenceException("There is something wrong with configurations.");
+            string audienceString = _config["JWT:Audience"] ?? throw new NullReferenceException("There is something wrong with configurations.");
             string expiresInMinutesString = _config["JWT:ExpiresInMinutes"] ?? throw new NullReferenceException("There is something wrong with configurations.");
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
@@ -31,6 +31,11 @@ namespace API.Services.Control
                 new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, user.Id.ToString()),
                 new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Email, user.Email)
             };
+
+            foreach(var role in user.Roles)
+            {
+                claims.Add(new(ClaimTypes.Role, role.Name));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: issuer,

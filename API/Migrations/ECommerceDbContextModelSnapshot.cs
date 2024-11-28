@@ -252,19 +252,19 @@ namespace API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("UserRole", b =>
                 {
-                    b.Property<int>("RolesId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("RolesId", "UserId");
+                    b.HasKey("RoleId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("API.Models.Domain.CartItem", b =>
@@ -290,8 +290,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Domain.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
@@ -306,8 +305,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.Domain.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Order");
 
@@ -318,8 +316,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Domain.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -335,11 +332,11 @@ namespace API.Migrations
                     b.Navigation("Cart");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("UserRole", b =>
                 {
                     b.HasOne("API.Models.Domain.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

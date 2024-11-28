@@ -1,6 +1,7 @@
 ﻿using API.Data.Db;
 using API.Models.Domain;
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Repositories
 {
@@ -19,13 +20,17 @@ namespace API.Data.Repositories
 
             return Result.Ok();
         }
-        public IQueryable<User> GetAllAsQueryable()
+
+        public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+            return _context.Users
+                .Include(x => x.Orders)
+                .Include(x => x.Cart)
+                .Include(x => x.Roles).AsEnumerable();
         }
         public Result<User> GetBy(Func<User, bool> predicate)
         {
-            var user = _context.Users.AsEnumerable<User>().FirstOrDefault(x => predicate(x));
+            var user = GetAll().FirstOrDefault(x => predicate(x));
             if (user == null)
             {
                 return Result.Fail("User not found!");
@@ -45,7 +50,7 @@ namespace API.Data.Repositories
         {
             var resp = GetBy(predicate);
 
-            if(resp.IsSuccess)
+            if (resp.IsSuccess)
             {
                 action(resp.Value);
                 await _context.SaveChangesAsync();

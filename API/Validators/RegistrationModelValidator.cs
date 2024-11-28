@@ -29,7 +29,7 @@ namespace API.Validators
                 .EmailAddress()
                 .WithMessage("Email address is not valid!")
                 .Must(email =>
-                 userDataRepository.GetAllAsQueryable().FirstOrDefault(u => u.Email == email) == null)
+                 userDataRepository.GetAll().FirstOrDefault(u => u.Email == email) == null)
                 .WithMessage("There is already a user with that email address!");
 
             RuleFor(reg => reg.Password)

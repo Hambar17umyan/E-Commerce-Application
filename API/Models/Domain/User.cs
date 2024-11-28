@@ -15,5 +15,6 @@ namespace API.Models.Domain
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public Cart Cart { get; set; } = new Cart();
         public int CartId { get; set; }
+
     }
 }
