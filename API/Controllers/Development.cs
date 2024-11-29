@@ -2,6 +2,8 @@
 using API.Models.Domain;
 using API.Services.Concrete.Control;
 using API.Services.Concrete.DataServices;
+using API.Services.Interfaces.Control;
+using API.Services.Interfaces.DataServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +14,11 @@ namespace API.Controllers
     public class Development : ControllerBase
     {
         ECommerceDbContext _context;
-        PasswordHashingService _passwordHashingService;
-        RoleDataService _roleDataService;
-        UserDataService _userDataService;
+        IPasswordHashingService _passwordHashingService;
+        IRoleDataService _roleDataService;
+        IUserDataService _userDataService;
 
-        public Development(ECommerceDbContext context, PasswordHashingService passwordHashingService, RoleDataService roleDataService, UserDataService userDataService)
+        public Development(ECommerceDbContext context, IPasswordHashingService passwordHashingService, IRoleDataService roleDataService, IUserDataService userDataService)
         {
             _context = context;
             _passwordHashingService = passwordHashingService;

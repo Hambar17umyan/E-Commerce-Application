@@ -1,11 +1,6 @@
-﻿using API.Models.Domain;
-using API.Models.Request;
-using API.Services.Control;
-using API.Services.DataServices;
-using API.Validators;
+﻿using API.Models.Request;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
 
 namespace API.Controllers
 {

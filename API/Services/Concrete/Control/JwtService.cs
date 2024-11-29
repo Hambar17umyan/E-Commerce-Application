@@ -1,4 +1,5 @@
 ﻿using API.Models.Domain;
+using API.Services.Interfaces.Control;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace API.Services.Concrete.Control
 {
-    public class JwtService
+    public class JwtService : IJwtService
     {
         private IConfiguration _config;
         public JwtService(IConfiguration configuration)

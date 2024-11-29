@@ -1,38 +1,25 @@
-﻿using API.Data.Repositories;
+﻿using API.Data.Repositories.Concrete;
+using API.Data.Repositories.Interfaces;
 using API.Models.Domain;
 using API.Services.Concrete.Control;
+using API.Services.Interfaces.Control;
+using API.Services.Interfaces.DataServices;
 using FluentResults;
 
 namespace API.Services.Concrete.DataServices
 {
-    public class UserDataService
+    public class UserDataService : DataService<User>, IUserDataService
     {
+        private IPasswordHashingService _passwordHashingService;
 
-        private UserDataRepository _repo;
-        private PasswordHashingService _passwordHashingService;
-
-        public UserDataService(UserDataRepository repo, PasswordHashingService passwordHashingService)
+        public UserDataService(IUserDataRepository repo, IPasswordHashingService passwordHashingService) : base(repo)
         {
-            _repo = repo;
             _passwordHashingService = passwordHashingService;
         }
-        public Result<User> GetById(int id)
+        public async Task<Result<User>> GetByEmailAsync(string email) => await GetByAsync(x => x.Email == email);
+        public async Task<Result<User>> AuthenticateAsync(string email, string password)
         {
-            return _repo.GetBy(x => x.Id == id);
-        }
-        public Result<User> GetByEmail(string email)
-        {
-            return _repo.GetBy(x => x.Email == email);
-        }
-        public Result<User> GetBy(Func<User, bool> predicate) => _repo.GetBy(predicate);
-        public Result<IEnumerable<User>> GetAll()
-        {
-            var users = _repo.GetAll();
-            return Result.Ok(users);
-        }
-        public Result<User> Authenticate(string email, string password)
-        {
-            var resp = GetByEmail(email);
+            var resp = await GetByEmailAsync(email);
 
             if (resp.IsSuccess)
             {
@@ -50,22 +37,10 @@ namespace API.Services.Concrete.DataServices
             {
                 return Result.Fail(resp.Errors);
             }
-
-        }
-        public async Task<Result> RemoveAsync(User user) => await _repo.RemoveAsync(user);
-        public async Task<Result> RemoveAsync(int userId)
-        {
-            var res = GetById(userId);
-            if (res.IsSuccess)
-            {
-                await _repo.RemoveAsync(res.Value);
-                return Result.Ok();
-            }
-            else return Result.Fail(res.Errors);
         }
         public async Task<Result> RemoveAsync(string email)
         {
-            var res = GetByEmail(email);
+            var res = await GetByEmailAsync(email);
             if (res.IsSuccess)
             {
                 await _repo.RemoveAsync(res.Value);
@@ -73,10 +48,7 @@ namespace API.Services.Concrete.DataServices
             }
             else return Result.Fail(res.Errors);
         }
-        public async Task<Result> UpdateAsync(Func<User, bool> predicate, Action<User> action) => await _repo.UpdateAsync(predicate, action);
         public async Task<Result> UpdateAsync(int id, Action<User> action) => await UpdateAsync(x => x.Id == id, action);
         public async Task<Result> UpdateAsync(string email, Action<User> action) => await UpdateAsync(x => x.Email == email, action);
-        public async Task<Result> AddAsync(User user) => await _repo.AddAsync(user);
-
     }
 }

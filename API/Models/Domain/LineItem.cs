@@ -1,6 +1,8 @@
-﻿namespace API.Models.Domain
+﻿using API.Models.Domain.Interfaces;
+
+namespace API.Models.Domain
 {
-    public class LineItem
+    public class LineItem : IDomain
     {
         public int Id { get; set; }
         public Order Order { get; set; }

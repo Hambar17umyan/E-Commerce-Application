@@ -1,6 +1,8 @@
 ﻿using API.Models.Request;
 using API.Services.Concrete.Control;
 using API.Services.Concrete.DataServices;
+using API.Services.Interfaces.Control;
+using API.Services.Interfaces.DataServices;
 using FluentResults;
 using MediatR;
 
@@ -8,10 +10,10 @@ namespace API.RequestHandlers
 {
     public class LoginRequestHandler : IRequestHandler<LoginRequestModel, Result<string>>
     {
-        private UserDataService _userDataService;
-        private JwtService _jwtService;
-        private PasswordHashingService _passwordHashingService;
-        public LoginRequestHandler(UserDataService userDataService, JwtService jwtService, PasswordHashingService passwordHashingService)
+        private IUserDataService _userDataService;
+        private IJwtService _jwtService;
+        private IPasswordHashingService _passwordHashingService;
+        public LoginRequestHandler(IUserDataService userDataService, IJwtService jwtService, IPasswordHashingService passwordHashingService)
         {
             _userDataService = userDataService;
             _jwtService = jwtService;
@@ -21,7 +23,7 @@ namespace API.RequestHandlers
         public async Task<Result<string>> Handle(LoginRequestModel request, CancellationToken cancellationToken)
         {
 
-            var resp = _userDataService.GetByEmail(request.Email);
+            var resp = _userDataService.GetByEmailAsync(request.Email);
             if(resp.IsSuccess)
             {
                 var user = resp.Value;

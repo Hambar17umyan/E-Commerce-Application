@@ -1,4 +1,4 @@
-﻿using API.Data.Repositories;
+﻿using API.Data.Repositories.Concrete;
 using API.Models.Request;
 using FluentValidation;
 
@@ -6,7 +6,7 @@ namespace API.Validators
 {
     public class LoginModelValidator : AbstractValidator<LoginRequestModel>
     {
-        public LoginModelValidator(UserDataRepository userRepository)
+        public LoginModelValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty()

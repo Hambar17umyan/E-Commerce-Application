@@ -1,17 +1,17 @@
 ﻿using API.Models.Domain;
 using API.Models.Request;
 using API.Services.Concrete.DataServices;
+using API.Services.Interfaces.DataServices;
 using FluentResults;
 using MediatR;
-using System.Transactions;
 
 namespace API.RequestHandlers
 {
     public class GetAllUsersRequestHandler : IRequestHandler<GetAllUsersRequestModel, Result<IEnumerable<User>>>
     {
-        private UserDataService _userDataService;
+        private IUserDataService _userDataService;
 
-        public GetAllUsersRequestHandler(UserDataService userDataService)
+        public GetAllUsersRequestHandler(IUserDataService userDataService)
         {
             _userDataService = userDataService;
         }

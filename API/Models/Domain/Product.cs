@@ -1,6 +1,8 @@
-﻿namespace API.Models.Domain
+﻿using API.Models.Domain.Interfaces;
+
+namespace API.Models.Domain
 {
-    public class Product
+    public class Product : IDomain
     {
         public int Id { get; set; }
         public string Name { get; set; }

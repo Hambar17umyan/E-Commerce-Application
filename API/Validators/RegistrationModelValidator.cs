@@ -1,5 +1,7 @@
-﻿using API.Data.Repositories;
+﻿using API.Data.Repositories.Concrete;
+using API.Data.Repositories.Interfaces;
 using API.Models.Request;
+using API.Services.Interfaces.DataServices;
 using FluentValidation;
 using System.Text.RegularExpressions;
 
@@ -7,7 +9,7 @@ namespace API.Validators
 {
     public class RegistrationModelValidator : AbstractValidator<RegistrationRequestModel>
     {
-        public RegistrationModelValidator(UserDataRepository userDataRepository)
+        public RegistrationModelValidator(IUserDataService userDataService)
         {
             Regex nameVal = new(@"([A-Z][a-z]*)([\\s\\\'-][A-Z][a-z]*)*");
             Regex passwordVal = new(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
@@ -29,7 +31,7 @@ namespace API.Validators
                 .EmailAddress()
                 .WithMessage("Email address is not valid!")
                 .Must(email =>
-                 userDataRepository.GetAll().FirstOrDefault(u => u.Email == email) == null)
+                 userDataService.GetAll().Value.FirstOrDefault(u => u.Email == email) == null)
                 .WithMessage("There is already a user with that email address!");
 
             RuleFor(reg => reg.Password)

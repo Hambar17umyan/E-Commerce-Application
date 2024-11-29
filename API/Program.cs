@@ -1,6 +1,6 @@
 using API.Behaviors;
 using API.Data.Db;
-using API.Data.Repositories;
+using API.Data.Repositories.Concrete;
 using API.Models.Domain;
 using API.RequestHandlers;
 using API.Services.Concrete.Control;

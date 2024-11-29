@@ -1,31 +1,38 @@
-﻿using API.Models.Domain;
+﻿using API.Data.Repositories.Concrete;
+using API.Data.Repositories.Interfaces;
+using API.Models.Domain;
+using API.Services.Interfaces.DataServices;
+using FluentResults;
 
 namespace API.Services.Concrete.DataServices
 {
-    public class RoleDataService
+    public class RoleDataService : DataService<Role>, IRoleDataService
     {
-        private static Role Admin = new Role()
+        private IConfiguration _configuration;
+
+        public RoleDataService(IRoleDataRepository repo, IConfiguration configuration) : base(repo)
         {
-            Name = "Admin",
-            Priority = 1,
-            Description = "Admin is the role with the greatest priority."
-        };
-        private static Role Customer = new Role()
-        {
-            Name = "Customer",
-            Priority = -1,
-            Description = "Customer is the role of client."
-        };
-        public Role GetAdmin()
-        {
-            ///TODO..
-            return Admin;
+            _configuration = configuration;
+            _admin =  GetByIdAsync(int.Parse(_configuration["Roles:Admin"])).Result.Value;
+            _customer = GetByIdAsync(int.Parse(_configuration["Roles:Customer"])).Result.Value;
         }
 
-        public Role GetCustomer()
+        private Role _admin { get; }
+        private Role _customer { get; }
+
+        public Role GetAdmin() => _admin;
+        public Role GetCustomer() => _customer;
+        public async Task<Result<Role>> GetByNameAsync(string name) => await GetByAsync(x => x.Name == name);
+        public async Task<Result> RemoveAsync(string Name)
         {
-            ///TODO..
-            return Customer;
+            var resp = await GetByNameAsync(Name);
+            if (resp.IsFailed)
+                return Result.Fail(resp.Errors);
+
+            var role = resp.Value;
+            await RemoveAsync(role);
+
+            return Result.Ok();
         }
     }
 }

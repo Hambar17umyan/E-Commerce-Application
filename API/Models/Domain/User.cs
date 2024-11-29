@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using API.Models.Domain.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Models.Domain
 {
-    public class User : IdentityUser<int>
+    public class User : IdentityUser<int>, IDomain
     {
         public override int Id { get; set; }
         public string FirstName { get; set; }

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using API.Models.Domain.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Models.Domain
 {
-    public class Role : IdentityRole<int>
+    public class Role : IdentityRole<int>, IDomain
     {
         public override int Id { get; set; }
         public override string Name { get; set; }

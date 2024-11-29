@@ -1,8 +1,9 @@
-﻿using System.Security.Cryptography;
+﻿using API.Services.Interfaces.Control;
+using System.Security.Cryptography;
 
 namespace API.Services.Concrete.Control
 {
-    public class PasswordHashingService
+    public class PasswordHashingService : IPasswordHashingService
     {
         public string Hash(string password)
         {

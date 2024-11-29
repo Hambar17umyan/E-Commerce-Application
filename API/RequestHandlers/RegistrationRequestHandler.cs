@@ -3,6 +3,8 @@ using API.Models.Domain;
 using API.Models.Request;
 using API.Services.Concrete.Control;
 using API.Services.Concrete.DataServices;
+using API.Services.Interfaces.Control;
+using API.Services.Interfaces.DataServices;
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +13,9 @@ namespace API.RequestHandlers
 {
     public class RegistrationRequestHandler : IRequestHandler<RegistrationRequestModel, Result>
     {
-        private UserDataService _userDataService;
-        private PasswordHashingService _passwordHashingService;
-        public RegistrationRequestHandler(UserDataService userDataService, PasswordHashingService passwordHashingService)
+        private IUserDataService _userDataService;
+        private IPasswordHashingService _passwordHashingService;
+        public RegistrationRequestHandler(IUserDataService userDataService, IPasswordHashingService passwordHashingService)
         {
             _userDataService = userDataService;
             _passwordHashingService = passwordHashingService;
