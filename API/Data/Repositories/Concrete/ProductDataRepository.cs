@@ -5,7 +5,7 @@ using FluentResults;
 
 namespace API.Data.Repositories.Concrete
 {
-    public class ProductDataRepository : DataRepository<Product>, IProductDataRepository
+    public sealed class ProductDataRepository : DataRepository<Product>, IProductDataRepository
     {
         public ProductDataRepository(ECommerceDbContext context) : base(context, context.Products) { }
         public async Task<Result> UpdatePriceAsync(Product product, decimal newPrice) => await UpdatePriceAsync(product.Id, newPrice);

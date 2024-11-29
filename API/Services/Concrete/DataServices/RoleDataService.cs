@@ -6,7 +6,7 @@ using FluentResults;
 
 namespace API.Services.Concrete.DataServices
 {
-    public class RoleDataService : DataService<Role>, IRoleDataService
+    public sealed class RoleDataService : DataService<Role>, IRoleDataService
     {
         private IConfiguration _configuration;
 

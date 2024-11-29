@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace API.Data.Repositories.Concrete
 {
-    public class RoleDataRepository : DataRepository<Role>, IRoleDataRepository
+    public sealed class RoleDataRepository : DataRepository<Role>, IRoleDataRepository
     {
         public RoleDataRepository(ECommerceDbContext context) : base(context, context.Roles) { }
     }

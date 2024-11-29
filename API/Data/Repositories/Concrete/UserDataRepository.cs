@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Repositories.Concrete
 {
-    public class UserDataRepository : DataRepository<User>, IUserDataRepository
+    public sealed class UserDataRepository : DataRepository<User>, IUserDataRepository
     {
         public UserDataRepository(ECommerceDbContext context) : base(context, context.Users) { }
     }

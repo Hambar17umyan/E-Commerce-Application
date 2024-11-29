@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace API.Services.Concrete.DataServices
 {
-    public class ProductDataService : DataService<Product>, IProductDataService
+    public sealed class ProductDataService : DataService<Product>, IProductDataService
     {
         public ProductDataService(IProductDataRepository repo) : base(repo) { }
     }

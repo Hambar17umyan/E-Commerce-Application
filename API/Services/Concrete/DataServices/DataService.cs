@@ -5,7 +5,7 @@ using FluentResults;
 
 namespace API.Services.Concrete.DataServices
 {
-    public class DataService<T> : IDataService<T> where T : IDomain
+    public abstract class DataService<T> : IDataService<T> where T : IDomain
     {
         protected IDataRepository<T> _repo;
 

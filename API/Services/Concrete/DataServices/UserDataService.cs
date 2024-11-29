@@ -8,7 +8,7 @@ using FluentResults;
 
 namespace API.Services.Concrete.DataServices
 {
-    public class UserDataService : DataService<User>, IUserDataService
+    public sealed class UserDataService : DataService<User>, IUserDataService
     {
         private IPasswordHashingService _passwordHashingService;
 
