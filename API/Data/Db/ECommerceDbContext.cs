@@ -25,7 +25,8 @@ namespace API.Data.Db
 
                 cb.HasOne(c => c.User)
                 .WithOne(u => u.Cart)
-                .HasForeignKey<Cart>(c => c.UserId);
+                .HasForeignKey<Cart>(c => c.UserId)
+                .IsRequired();
 
                 cb.HasMany(c => c.Items)
                 .WithOne(ci => ci.Cart)
@@ -109,7 +110,9 @@ namespace API.Data.Db
                     j => j.HasOne<User>()
                     .WithMany()
                     .HasForeignKey("UserId")
-                );
+                ); 
+
+
             });
 
             base.OnModelCreating(mb);

@@ -41,5 +41,19 @@ namespace API.Controllers
                 return Ok(res.Value);
             return StatusCode(500);
         }
+
+        //[HttpGet]
+        //[Route("/data/orders")]
+        //public IActionResult GetAllOrders()
+        //{
+
+        //}
+
+        //[HttpGet]
+        //[Route("/data/products")]
+        //public IActionResult GetAllProducts()
+        //{
+
+        //}
     }
 }

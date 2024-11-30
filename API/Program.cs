@@ -1,10 +1,14 @@
 using API.Behaviors;
+using API.Controllers;
 using API.Data.Db;
 using API.Data.Repositories.Concrete;
+using API.Data.Repositories.Interfaces;
 using API.Models.Domain;
 using API.RequestHandlers;
 using API.Services.Concrete.Control;
 using API.Services.Concrete.DataServices;
+using API.Services.Interfaces.Control;
+using API.Services.Interfaces.DataServices;
 using API.Validators;
 using FluentValidation;
 using MediatR;
@@ -27,13 +31,12 @@ namespace API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+
+            ConfigureSql(builder); //chotki
+            ConfigureAuthentication(builder); //chotki
             ConfigureMediatR(builder);
-            ConfigureAuthentication(builder);
             ConfigureServices(builder);
-            ConfigureSql(builder);
             ConfigureValidators(builder);
-           // ConfigureAuthorization(builder);
-            //ConfigureIdentity(builder);
 
             var app = builder.Build();
 
@@ -56,16 +59,22 @@ namespace API
 
         public static IServiceCollection ConfigureServices(WebApplicationBuilder builder)
         {
-            return builder.Services.AddScoped<UserDataRepository>()
-                .AddScoped<JwtService>()
-                .AddScoped<PasswordHashingService>()
-                .AddScoped<RoleDataService>()
-                .AddScoped<UserDataService>();
+            return builder.Services.AddScoped<InventoryDataService>()
+                .AddScoped<IOrderDataService, OrderDataService>()
+                .AddScoped<IProductDataService, ProductDataService>()
+                .AddScoped<IRoleDataService, RoleDataService>()
+                .AddScoped<IUserDataService, UserDataService>()
+                .AddScoped<IInventoryDataRepository, InventoryDataRepository>()
+                .AddScoped<IOrderDataRepository, OrderDataRepository>()
+                .AddScoped<IProductDataRepository, ProductDataRepository>()
+                .AddScoped<IRoleDataRepository, RoleDataRepository>()
+                .AddScoped<IUserDataRepository, UserDataRepository>()
+                .AddScoped<IJwtService, JwtService>()
+                .AddScoped<IPasswordHashingService, PasswordHashingService>();
         }
         public static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
         {
             return builder.Services.AddMediatR(typeof(RegistrationRequestHandler).Assembly);
-
         }
         public static IServiceCollection ConfigureSql(WebApplicationBuilder builder)
         {
@@ -103,10 +112,6 @@ namespace API
                 options.AddPolicy("AdminOnly", policy =>
                     policy.RequireRole("Admin"));
             });
-        }
-        public static void ConfigureIdentity(WebApplicationBuilder builder)
-        {
-            builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = false);
         }
     }
 }

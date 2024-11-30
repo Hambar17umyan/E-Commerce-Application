@@ -23,11 +23,11 @@ namespace API.Data.Repositories.Concrete
             await _context.SaveChangesAsync();
             return Result.Ok();
         }
-        public virtual IEnumerable<T> GetAll() => _dbSet.AsEnumerable();
+        public virtual IEnumerable<T> GetAll() => GetAllAsQueryable().AsEnumerable();
         public virtual IQueryable<T> GetAllAsQueryable() => _dbSet;
         public virtual async Task<Result<T>> GetBy(Func<T, bool> predicate)
         {
-            var res = await _dbSet.FirstOrDefaultAsync(x => predicate(x));
+            var res = await GetAllAsQueryable().FirstOrDefaultAsync(x => predicate(x));
             if (res is null)
                 return Result.Fail($"{nameof(T)} not found!");
             return res;

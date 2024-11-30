@@ -23,7 +23,7 @@ namespace API.RequestHandlers
         public async Task<Result<string>> Handle(LoginRequestModel request, CancellationToken cancellationToken)
         {
 
-            var resp = _userDataService.GetByEmailAsync(request.Email);
+            var resp = await _userDataService.GetByEmailAsync(request.Email);
             if(resp.IsSuccess)
             {
                 var user = resp.Value;
