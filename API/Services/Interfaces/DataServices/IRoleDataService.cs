@@ -7,7 +7,7 @@ namespace API.Services.Interfaces.DataServices
     {
         public Role GetAdmin();
         public Role GetCustomer();
-        public Task<Result<Role>> GetByNameAsync(string name);
+        public Result<Role> GetByName(string name);
         public Task<Result> RemoveAsync(string Name);
     }
 }

@@ -13,8 +13,8 @@ namespace API.Services.Concrete.DataServices
         public RoleDataService(IRoleDataRepository repo, IConfiguration configuration) : base(repo)
         {
             _configuration = configuration;
-            _admin =  GetByIdAsync(int.Parse(_configuration["Roles:Admin"])).Result.Value;
-            _customer = GetByIdAsync(int.Parse(_configuration["Roles:Customer"])).Result.Value;
+            _admin =  GetById(int.Parse(_configuration["Roles:Admin"])).Value;
+            _customer = GetById(int.Parse(_configuration["Roles:Customer"])).Value;
         }
 
         private Role _admin { get; }
@@ -22,10 +22,10 @@ namespace API.Services.Concrete.DataServices
 
         public Role GetAdmin() => _admin;
         public Role GetCustomer() => _customer;
-        public async Task<Result<Role>> GetByNameAsync(string name) => await GetByAsync(x => x.Name == name);
+        public Result<Role> GetByName(string name) => GetBy(x => x.Name == name);
         public async Task<Result> RemoveAsync(string Name)
         {
-            var resp = await GetByNameAsync(Name);
+            var resp = GetByName(Name);
             if (resp.IsFailed)
                 return Result.Fail(resp.Errors);
 

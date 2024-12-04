@@ -16,10 +16,10 @@ namespace API.Services.Concrete.DataServices
         {
             _passwordHashingService = passwordHashingService;
         }
-        public async Task<Result<User>> GetByEmailAsync(string email) => await GetByAsync(x => x.Email == email);
-        public async Task<Result<User>> AuthenticateAsync(string email, string password)
+        public Result<User> GetByEmail(string email) => GetBy(x => x.Email == email);
+        public Result<User> Authenticate(string email, string password)
         {
-            var resp = await GetByEmailAsync(email);
+            var resp = GetByEmail(email);
 
             if (resp.IsSuccess)
             {
@@ -40,7 +40,7 @@ namespace API.Services.Concrete.DataServices
         }
         public async Task<Result> RemoveAsync(string email)
         {
-            var res = await GetByEmailAsync(email);
+            var res = GetByEmail(email);
             if (res.IsSuccess)
             {
                 await _repo.RemoveAsync(res.Value);

@@ -105,13 +105,5 @@ namespace API
                         };
                     });
         }
-        public static void ConfigureAuthorization(WebApplicationBuilder builder)
-        {
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AdminOnly", policy =>
-                    policy.RequireRole("Admin"));
-            });
-        }
     }
 }

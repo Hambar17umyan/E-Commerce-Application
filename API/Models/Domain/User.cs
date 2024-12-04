@@ -14,7 +14,7 @@ namespace API.Models.Domain
         public bool IsActive { get; set; }
         public ICollection<Role> Roles { get; set; }
         public ICollection<Order> Orders { get; set; } = new List<Order>();
-        public Cart Cart { get; set; } = new Cart();
+        public Cart Cart { get; set; } = null;
         public int CartId { get; set; }
 
     }

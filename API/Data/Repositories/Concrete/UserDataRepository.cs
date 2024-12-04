@@ -11,13 +11,13 @@ namespace API.Data.Repositories.Concrete
     {
         public UserDataRepository(ECommerceDbContext context) : base(context, context.Users) { }
 
-        public override IQueryable<User> GetAllAsQueryable()
+        public override IEnumerable<User> GetAll()
         {
             return _dbSet.Include(x => x.Roles)
                 .Include(x => x.Orders)
-                .ThenInclude(x=>x.LineItems)
-                .ThenInclude(x=>x.Product)
-                .Include(x => x.Cart);
+                .ThenInclude(x => x.LineItems)
+                .ThenInclude(x => x.Product)
+                .AsEnumerable();
         }
     }
 }

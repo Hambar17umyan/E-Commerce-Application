@@ -2,6 +2,8 @@
 using API.Models.Request;
 using API.Services.Concrete.DataServices;
 using API.Services.Interfaces.DataServices;
+using Azure.Core;
+using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,47 +15,72 @@ namespace API.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
-        private IMediator Mediator;
-        private IUserDataService _userDataService;
-        private IRoleDataService _roleDataService;
+        private IMediator _mediator;
 
-        public AdminController(IUserDataService userDataService)
+        public AdminController(IMediator mediator)
         {
-            _userDataService = userDataService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         [Route("/data/users")]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsersAsync([FromQuery]GetAllUsersRequestModel request)
         {
-            var res = _userDataService.GetAll();
+            var res = await _mediator.Send(request);
             if(res.IsSuccess)
+            {
                 return Ok(res.Value);
-            return StatusCode(500);
+            }
+            return StatusCode(500, res.Errors);
         }
 
         [HttpGet]
         [Route("/data/roles")]
-        public IActionResult GetAllRoles()
+        public async Task<IActionResult> GetAllRolesAsync([FromQuery] GetAllRolesRequestModel request)
         {
-            var res = _roleDataService.GetAll();
+            var res = await _mediator.Send(request);
             if (res.IsSuccess)
+            {
                 return Ok(res.Value);
-            return StatusCode(500);
+            }
+            return StatusCode(500, res.Errors);
         }
 
-        //[HttpGet]
-        //[Route("/data/orders")]
-        //public IActionResult GetAllOrders()
-        //{
+        [HttpGet]
+        [Route("/data/orders")]
+        public async Task<IActionResult> GetAllOrdersAsync([FromQuery] GetAllOrdersRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok(res.Value);
+            }
+            return StatusCode(500, res.Errors);
+        }
 
-        //}
+        [HttpGet]
+        [Route("/data/products")]
+        public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProductsRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok(res.Value);
+            }
+            return StatusCode(500, res.Errors);
+        }
 
-        //[HttpGet]
-        //[Route("/data/products")]
-        //public IActionResult GetAllProducts()
-        //{
+        [HttpPost]
+        [Route("/data/users/setadmin")]
+        public async Task<IActionResult> SetAdminAsync(SetAdminRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok();
+            }
+            return StatusCode(500, res.Errors);
+        }
 
-        //}
     }
 }

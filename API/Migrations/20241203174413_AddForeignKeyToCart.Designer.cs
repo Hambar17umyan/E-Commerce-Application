@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    [Migration("20241130084627_UserCart")]
-    partial class UserCart
+    [Migration("20241203174413_AddForeignKeyToCart")]
+    partial class AddForeignKeyToCart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

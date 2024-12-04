@@ -16,7 +16,7 @@ namespace API.Data.Repositories.Concrete
         }
         public async Task<Result> IncreaseQuantityAsync(int id, int numberOfNewItems)
         {
-            var resp = await GetBy(x => x.Id == id);
+            var resp = GetBy(x => x.Id == id);
             if(resp.IsSuccess)
             {
                 resp.Value.Quantity += numberOfNewItems;

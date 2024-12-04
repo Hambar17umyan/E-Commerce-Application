@@ -13,7 +13,9 @@ namespace API.Data.Db
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<LineItem> LineItems { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Cart> Carts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder mb)
@@ -25,8 +27,7 @@ namespace API.Data.Db
 
                 cb.HasOne(c => c.User)
                 .WithOne(u => u.Cart)
-                .HasForeignKey<Cart>(c => c.UserId)
-                .IsRequired();
+                .HasForeignKey<Cart>(c => c.UserId);
 
                 cb.HasMany(c => c.Items)
                 .WithOne(ci => ci.Cart)
@@ -37,10 +38,6 @@ namespace API.Data.Db
             {
                 cib.HasKey(cib => cib.Id);
                 cib.Property(ci => ci.Id).ValueGeneratedOnAdd();
-
-                //cib.HasOne(ci => ci.Cart)
-                //.WithMany(c => c.Items)
-                //.HasForeignKey(ci => ci.CartId);
 
                 cib.HasOne(ci => ci.Product)
                 .WithMany()

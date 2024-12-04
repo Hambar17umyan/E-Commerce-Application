@@ -15,10 +15,12 @@ namespace API.RequestHandlers
     {
         private IUserDataService _userDataService;
         private IPasswordHashingService _passwordHashingService;
-        public RegistrationRequestHandler(IUserDataService userDataService, IPasswordHashingService passwordHashingService)
+        private IRoleDataService _roleDataService;
+        public RegistrationRequestHandler(IUserDataService userDataService, IPasswordHashingService passwordHashingService, IRoleDataService roleDataService)
         {
             _userDataService = userDataService;
             _passwordHashingService = passwordHashingService;
+            _roleDataService = roleDataService;
         }
 
         public async Task<Result> Handle(RegistrationRequestModel request, CancellationToken cancellationToken)
@@ -28,7 +30,11 @@ namespace API.RequestHandlers
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
-                PasswordHash = _passwordHashingService.Hash(request.Password)
+                PasswordHash = _passwordHashingService.Hash(request.Password),
+                Roles = new List<Role>()
+                {
+                    _roleDataService.GetCustomer()
+                }
             };
             return await _userDataService.AddAsync(user);
         }
