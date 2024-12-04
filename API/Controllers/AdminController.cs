@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("/data/users")]
+        [Route("/users/data")]
         public async Task<IActionResult> GetAllUsersAsync([FromQuery]GetAllUsersRequestModel request)
         {
             var res = await _mediator.Send(request);
@@ -35,7 +35,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("/data/roles")]
+        [Route("/roles/data")]
         public async Task<IActionResult> GetAllRolesAsync([FromQuery] GetAllRolesRequestModel request)
         {
             var res = await _mediator.Send(request);
@@ -47,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("/data/orders")]
+        [Route("/orders/data")]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] GetAllOrdersRequestModel request)
         {
             var res = await _mediator.Send(request);
@@ -59,7 +59,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("/data/products")]
+        [Route("/products/data")]
         public async Task<IActionResult> GetAllProductsAsync([FromQuery] GetAllProductsRequestModel request)
         {
             var res = await _mediator.Send(request);
@@ -70,8 +70,8 @@ namespace API.Controllers
             return StatusCode(500, res.Errors);
         }
 
-        [HttpPost]
-        [Route("/data/users/setadmin")]
+        [HttpPut]
+        [Route("/users/setadmin")]
         public async Task<IActionResult> SetAdminAsync(SetAdminRequestModel request)
         {
             var res = await _mediator.Send(request);
