@@ -59,7 +59,8 @@ namespace API
 
         public static IServiceCollection ConfigureServices(WebApplicationBuilder builder)
         {
-            return builder.Services.AddScoped<InventoryDataService>()
+            return builder.Services
+                .AddScoped<IInventoryDataService, InventoryDataService>()
                 .AddScoped<IOrderDataService, OrderDataService>()
                 .AddScoped<IProductDataService, ProductDataService>()
                 .AddScoped<IRoleDataService, RoleDataService>()

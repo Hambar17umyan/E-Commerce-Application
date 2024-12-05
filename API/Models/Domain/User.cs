@@ -15,7 +15,7 @@ namespace API.Models.Domain
         public ICollection<Role> Roles { get; set; }
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public Cart Cart { get; set; } = null;
-        public int CartId { get; set; }
+        public int? CartId { get; set; }
 
     }
 }

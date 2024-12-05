@@ -82,5 +82,16 @@ namespace API.Controllers
             return StatusCode(500, res.Errors);
         }
 
+        [HttpPost]
+        [Route("/users/addproduct")]
+        public async Task<IActionResult> AddProductAsync(AddProductRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok();
+            }
+            return StatusCode(500, res.Errors);
+        }
     }
 }
