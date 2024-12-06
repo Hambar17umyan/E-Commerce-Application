@@ -69,6 +69,18 @@ namespace API.Controllers
             }
             return StatusCode(500, res.Errors);
         }
+        
+        [HttpGet]
+        [Route("/inventories/data")]
+        public async Task<IActionResult> GetAllInventoriesAsync([FromQuery] GetAllInventoriesRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok(res.Value);
+            }
+            return StatusCode(500, res.Errors);
+        }
 
         [HttpPut]
         [Route("/users/setadmin")]
@@ -93,5 +105,30 @@ namespace API.Controllers
             }
             return StatusCode(500, res.Errors);
         }
+
+        [HttpPut]
+        [Route("products/change")]
+        public async Task<IActionResult> ChangeProductAsync(ChangeProductRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok();
+            }
+            return StatusCode(500, res.Errors);
+        }
+
+        [HttpPut]
+        [Route("inventory/changequantity")]
+        public async Task<IActionResult> ChangeInventoryQuantityManualAsync(ChangeInventoryQuantityManualRequestModel request)
+        {
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok();
+            }
+            return StatusCode(500, res.Errors);
+        }
+
     }
 }

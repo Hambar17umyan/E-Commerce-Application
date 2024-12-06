@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\Interfaces\" />
     <Folder Include="Models\Control\" />
     <Folder Include="Models\Response\" />
   </ItemGroup>

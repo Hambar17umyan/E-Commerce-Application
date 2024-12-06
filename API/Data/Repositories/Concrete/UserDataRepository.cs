@@ -14,6 +14,7 @@ namespace API.Data.Repositories.Concrete
         public override IEnumerable<User> GetAll()
         {
             return _dbSet.Include(x => x.Roles)
+                .Include(x => x.Cart)
                 .Include(x => x.Orders)
                 .ThenInclude(x => x.LineItems)
                 .ThenInclude(x => x.Product)

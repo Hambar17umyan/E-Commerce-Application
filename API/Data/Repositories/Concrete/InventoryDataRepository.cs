@@ -8,6 +8,12 @@ namespace API.Data.Repositories.Concrete
 {
     public sealed class InventoryDataRepository : DataRepository<Inventory>, IInventoryDataRepository
     {
+        public override IEnumerable<Inventory> GetAll()
+        {
+            return _dbSet
+                .Include(x => x.Product)
+                .AsEnumerable();
+        }
         public InventoryDataRepository(ECommerceDbContext context) : base(context, context.Inventories) { }
         public async Task<Result> DecreaseQuantityAsync(int id, int numberOfOldItems) => await IncreaseQuantityAsync(id, -numberOfOldItems);
         public Task<Result> DecreaseQuantityAsync(Product product, int numberOfOldItems)

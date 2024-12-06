@@ -4,6 +4,7 @@ using API.Data.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    partial class ECommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241205201040_RemoveUserFromCartEntity")]
+    partial class RemoveUserFromCartEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,10 +37,6 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Carts");
                 });
@@ -203,6 +202,9 @@ namespace API.Migrations
                     b.Property<int?>("CartId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CartId1")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -253,6 +255,8 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId1");
+
                     b.ToTable("Users");
                 });
 
@@ -269,13 +273,6 @@ namespace API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("API.Models.Domain.Cart", b =>
-                {
-                    b.HasOne("API.Models.Domain.User", null)
-                        .WithOne("Cart")
-                        .HasForeignKey("API.Models.Domain.Cart", "UserId");
                 });
 
             modelBuilder.Entity("API.Models.Domain.CartItem", b =>
@@ -332,6 +329,15 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Models.Domain.User", b =>
+                {
+                    b.HasOne("API.Models.Domain.Cart", "Cart")
+                        .WithMany()
+                        .HasForeignKey("CartId1");
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("UserRole", b =>
                 {
                     b.HasOne("API.Models.Domain.Role", null)
@@ -359,8 +365,6 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Domain.User", b =>
                 {
-                    b.Navigation("Cart");
-
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

@@ -34,7 +34,8 @@ namespace API.RequestHandlers
                 Roles = new List<Role>()
                 {
                     _roleDataService.GetCustomer()
-                }
+                },
+                Cart = new Cart()
             };
             return await _userDataService.AddAsync(user);
         }
