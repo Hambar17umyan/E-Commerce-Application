@@ -1,6 +1,6 @@
 ﻿using API.Data.Repositories.Concrete;
 using API.Data.Repositories.Interfaces;
-using API.Models.Domain;
+using API.Models.Domain.Concrete;
 using API.Services.Interfaces.DataServices;
 using FluentResults;
 
@@ -15,13 +15,16 @@ namespace API.Services.Concrete.DataServices
             _configuration = configuration;
             _admin =  GetById(int.Parse(_configuration["Roles:Admin"])).Value;
             _customer = GetById(int.Parse(_configuration["Roles:Customer"])).Value;
+            _superAdmin = GetById(int.Parse(_configuration["Roles:SuperAdmin"])).Value;
         }
 
         private Role _admin { get; }
         private Role _customer { get; }
+        private Role _superAdmin { get; }
 
         public Role GetAdmin() => _admin;
         public Role GetCustomer() => _customer;
+        public Role GetSuperAdmin() => _superAdmin;
         public Result<Role> GetByName(string name) => GetBy(x => x.Name == name);
         public async Task<Result> RemoveAsync(string Name)
         {
@@ -34,5 +37,6 @@ namespace API.Services.Concrete.DataServices
 
             return Result.Ok();
         }
+
     }
 }

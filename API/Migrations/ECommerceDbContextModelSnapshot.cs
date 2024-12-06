@@ -22,7 +22,7 @@ namespace API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("API.Models.Domain.Cart", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Cart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace API.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.CartItem", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace API.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Inventory", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Inventory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,7 +92,7 @@ namespace API.Migrations
                     b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.LineItem", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.LineItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace API.Migrations
                     b.ToTable("LineItems");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Order", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,7 +139,7 @@ namespace API.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Product", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,7 +161,7 @@ namespace API.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Role", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -189,7 +189,7 @@ namespace API.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.User", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,9 +198,6 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CartId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -271,22 +268,22 @@ namespace API.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Cart", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Cart", b =>
                 {
-                    b.HasOne("API.Models.Domain.User", null)
+                    b.HasOne("API.Models.Domain.Concrete.User", null)
                         .WithOne("Cart")
-                        .HasForeignKey("API.Models.Domain.Cart", "UserId");
+                        .HasForeignKey("API.Models.Domain.Concrete.Cart", "UserId");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.CartItem", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.CartItem", b =>
                 {
-                    b.HasOne("API.Models.Domain.Cart", "Cart")
+                    b.HasOne("API.Models.Domain.Concrete.Cart", "Cart")
                         .WithMany("Items")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Domain.Product", "Product")
+                    b.HasOne("API.Models.Domain.Concrete.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,24 +294,24 @@ namespace API.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Inventory", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Inventory", b =>
                 {
-                    b.HasOne("API.Models.Domain.Product", "Product")
+                    b.HasOne("API.Models.Domain.Concrete.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.LineItem", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.LineItem", b =>
                 {
-                    b.HasOne("API.Models.Domain.Order", "Order")
+                    b.HasOne("API.Models.Domain.Concrete.Order", "Order")
                         .WithMany("LineItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Domain.Product", "Product")
+                    b.HasOne("API.Models.Domain.Concrete.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
@@ -323,9 +320,9 @@ namespace API.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Order", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Order", b =>
                 {
-                    b.HasOne("API.Models.Domain.User", "User")
+                    b.HasOne("API.Models.Domain.Concrete.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
 
@@ -334,30 +331,30 @@ namespace API.Migrations
 
             modelBuilder.Entity("UserRole", b =>
                 {
-                    b.HasOne("API.Models.Domain.Role", null)
+                    b.HasOne("API.Models.Domain.Concrete.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Domain.User", null)
+                    b.HasOne("API.Models.Domain.Concrete.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Cart", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Cart", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.Order", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.Order", b =>
                 {
                     b.Navigation("LineItems");
                 });
 
-            modelBuilder.Entity("API.Models.Domain.User", b =>
+            modelBuilder.Entity("API.Models.Domain.Concrete.User", b =>
                 {
                     b.Navigation("Cart");
 

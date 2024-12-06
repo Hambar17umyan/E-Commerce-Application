@@ -1,6 +1,6 @@
 ﻿using API.Data.Repositories.Concrete;
 using API.Data.Repositories.Interfaces;
-using API.Models.Request;
+using API.Models.Request.Commands;
 using API.Services.Interfaces.DataServices;
 using FluentValidation;
 using System.Text.RegularExpressions;

@@ -1,4 +1,4 @@
-﻿using API.Models.Domain;
+﻿using API.Models.Domain.Concrete;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 

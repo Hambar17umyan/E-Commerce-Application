@@ -1,4 +1,4 @@
-﻿using API.Models.Domain;
+﻿using API.Models.Domain.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -27,7 +27,8 @@ namespace API.Data.Db
 
                 cb.HasMany(c => c.Items)
                 .WithOne(ci => ci.Cart)
-                .HasForeignKey(ci => ci.CartId);
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             mb.Entity<CartItem>(cib =>
@@ -37,7 +38,8 @@ namespace API.Data.Db
 
                 cib.HasOne(ci => ci.Product)
                 .WithMany()
-                .HasForeignKey(ci => ci.ProductId);
+                .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             mb.Entity<Inventory>(ib =>
@@ -47,7 +49,8 @@ namespace API.Data.Db
 
                 ib.HasOne(ib => ib.Product)
                 .WithMany()
-                .HasForeignKey(ib => ib.ProductId);
+                .HasForeignKey(ib => ib.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             mb.Entity<LineItem>(lib =>
@@ -57,11 +60,13 @@ namespace API.Data.Db
 
                 lib.HasOne(li => li.Order)
                 .WithMany(o => o.LineItems)
-                .HasForeignKey(li => li.OrderId);
+                .HasForeignKey(li => li.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 lib.HasOne(li => li.Product)
                 .WithMany()
-                .HasForeignKey(li => li.ProductId);
+                .HasForeignKey(li => li.ProductId)
+                .OnDelete(DeleteBehavior.SetNull);
             });
 
             mb.Entity<Order>(ob =>
@@ -71,8 +76,8 @@ namespace API.Data.Db
 
                 ob.HasOne(o => o.User)
                 .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.UserId);
-
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             mb.Entity<Product>(pb =>
@@ -108,7 +113,8 @@ namespace API.Data.Db
                 ub.HasOne(u => u.Cart)
                 .WithOne()
                 .HasForeignKey<Cart>(c => c.UserId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             base.OnModelCreating(mb);

@@ -1,6 +1,6 @@
 ﻿using API.Data.Db;
 using API.Data.Repositories.Interfaces;
-using API.Models.Domain;
+using API.Models.Domain.Concrete;
 using FluentResults;
 
 namespace API.Data.Repositories.Concrete

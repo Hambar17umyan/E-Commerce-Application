@@ -1,5 +1,5 @@
 ﻿using API.Data.Repositories.Concrete;
-using API.Models.Request;
+using API.Models.Request.Commands;
 using FluentValidation;
 
 namespace API.Validators

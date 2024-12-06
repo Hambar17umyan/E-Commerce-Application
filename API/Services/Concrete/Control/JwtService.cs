@@ -1,4 +1,4 @@
-﻿using API.Models.Domain;
+﻿using API.Models.Domain.Concrete;
 using API.Services.Interfaces.Control;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

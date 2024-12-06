@@ -4,7 +4,7 @@ using API.Data.Db;
 using API.Data.Repositories.Concrete;
 using API.Data.Repositories.Interfaces;
 using API.Models.Domain;
-using API.RequestHandlers;
+using API.RequestHandlers.CommandHandlers;
 using API.Services.Concrete.Control;
 using API.Services.Concrete.DataServices;
 using API.Services.Interfaces.Control;
@@ -32,8 +32,9 @@ namespace API
             builder.Services.AddSwaggerGen();
 
 
-            ConfigureSql(builder); //chotki
-            ConfigureAuthentication(builder); //chotki
+            ConfigureSql(builder);
+            ConfigureAuthentication(builder);
+            ConfigureAuthorization(builder);
             ConfigureMediatR(builder);
             ConfigureServices(builder);
             ConfigureValidators(builder);
@@ -57,7 +58,7 @@ namespace API
             app.Run();
         }
 
-        public static IServiceCollection ConfigureServices(WebApplicationBuilder builder)
+        private static IServiceCollection ConfigureServices(WebApplicationBuilder builder)
         {
             return builder.Services
                 .AddScoped<IInventoryDataService, InventoryDataService>()
@@ -73,21 +74,21 @@ namespace API
                 .AddScoped<IJwtService, JwtService>()
                 .AddScoped<IPasswordHashingService, PasswordHashingService>();
         }
-        public static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
+        private static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
         {
             return builder.Services.AddMediatR(typeof(RegistrationRequestHandler).Assembly);
         }
-        public static IServiceCollection ConfigureSql(WebApplicationBuilder builder)
+        private static IServiceCollection ConfigureSql(WebApplicationBuilder builder)
         {
             return builder.Services.
                 AddSqlServer<ECommerceDbContext>(builder.Configuration.GetConnectionString("Default Connection"));
         }
-        public static void ConfigureValidators(WebApplicationBuilder builder)
+        private static void ConfigureValidators(WebApplicationBuilder builder)
         {
             builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
             builder.Services.AddValidatorsFromAssemblyContaining<RegistrationModelValidator>();
         }
-        public static AuthenticationBuilder ConfigureAuthentication(WebApplicationBuilder builder)
+        private static AuthenticationBuilder ConfigureAuthentication(WebApplicationBuilder builder)
         {
             return builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -105,6 +106,14 @@ namespace API
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
                         };
                     });
+        }
+        private static IServiceCollection ConfigureAuthorization(WebApplicationBuilder builder)
+        {
+            return builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminPolicy", policy =>
+                    policy.RequireRole("Admin", "SuperAdmin"));
+            });
         }
     }
 }
