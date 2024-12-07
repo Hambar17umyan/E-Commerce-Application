@@ -1,11 +1,13 @@
-﻿using API.Models.Request.Commands;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Request.Commands;
 using API.Services.Interfaces.DataServices;
 using FluentResults;
 using MediatR;
+using System.Net;
 
 namespace API.RequestHandlers.CommandHandlers
 {
-    public class SetAdminRequestHandler : IRequestHandler<SetAdminRequestModel, Result>
+    public class SetAdminRequestHandler : IRequestHandler<SetAdminRequestModel, InnerResult>
     {
         private IUserDataService _userDataService;
         private IRoleDataService _roleDataService;
@@ -16,7 +18,7 @@ namespace API.RequestHandlers.CommandHandlers
             _roleDataService = roleDataService;
         }
 
-        public Task<Result> Handle(SetAdminRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult> Handle(SetAdminRequestModel request, CancellationToken cancellationToken)
         {
             var resp = _userDataService.GetById(request.UserId);
             if (resp.IsSuccess)
@@ -24,14 +26,14 @@ namespace API.RequestHandlers.CommandHandlers
                 var user = resp.Value;
                 if (user.Roles.Any(x => x.Name == "Admin"))
                 {
-                    return Task.FromResult(Result.Fail("The user is already an admin!"));
+                    return InnerResult.Fail("The user is already an admin!", HttpStatusCode.BadRequest);
                 }
-                _userDataService.UpdateAsync(user.Id, x => x.Roles.Add(_roleDataService.GetAdmin()));
-                return Task.FromResult(Result.Ok());
+                await _userDataService.UpdateAsync(user.Id, x => x.Roles.Add(_roleDataService.GetAdmin()));
+                return InnerResult.Ok();
             }
             else
             {
-                return Task.FromResult(Result.Fail(resp.Errors));
+                return InnerResult.Fail(resp.Errors, resp.StatusCode);
             }
         }
     }

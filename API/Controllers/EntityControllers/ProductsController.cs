@@ -3,6 +3,7 @@ using API.Models.Request.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace API.Controllers.EntityControllers
 {
@@ -42,7 +43,7 @@ namespace API.Controllers.EntityControllers
             {
                 return Ok();
             }
-            return BadRequest(500, res.Errors);
+            return BadRequest(res.Errors);
         }
         #endregion
         #region Put

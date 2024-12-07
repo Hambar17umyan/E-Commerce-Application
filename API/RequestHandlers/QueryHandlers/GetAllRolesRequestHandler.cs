@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Queries;
 using API.Models.Response.Output;
 using API.Services.Concrete.DataServices;
@@ -9,7 +10,7 @@ using MediatR;
 
 namespace API.RequestHandlers.QueryHandlers
 {
-    public class GetAllRolesRequestHandler : IRequestHandler<GetAllRolesRequestModel, Result<IEnumerable<RoleOutputModel>>>
+    public class GetAllRolesRequestHandler : IRequestHandler<GetAllRolesRequestModel, InnerResult<IEnumerable<RoleOutputModel>>>
     {
         private IRoleDataService _roleDataService;
         private IMapper _mapper;
@@ -20,15 +21,15 @@ namespace API.RequestHandlers.QueryHandlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<RoleOutputModel>>> Handle(GetAllRolesRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult<IEnumerable<RoleOutputModel>>> Handle(GetAllRolesRequestModel request, CancellationToken cancellationToken)
         {
             var res = _roleDataService.GetAll();
             if (res.IsSuccess)
             {
-                return Result.Ok(
+                return InnerResult<IEnumerable<RoleOutputModel>>.Ok(
                         _mapper.Map<IEnumerable<Role>, IEnumerable<RoleOutputModel>>(res.Value));
             }
-            return Result.Fail(res.Errors);
+            return InnerResult<IEnumerable<RoleOutputModel>>.Fail(res.Errors, res.StatusCode);
         }
     }
 }

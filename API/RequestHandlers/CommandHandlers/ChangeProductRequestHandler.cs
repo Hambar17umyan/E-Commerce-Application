@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Commands;
 using API.Services.Interfaces.DataServices;
 using FluentResults;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace API.RequestHandlers.CommandHandlers
 {
-    public class ChangeProductRequestHandler : IRequestHandler<ChangeProductRequestModel, Result>
+    public class ChangeProductRequestHandler : IRequestHandler<ChangeProductRequestModel, InnerResult>
     {
         private IProductDataService _productDataService;
 
@@ -15,7 +16,7 @@ namespace API.RequestHandlers.CommandHandlers
             _productDataService = productDataService;
         }
 
-        public async Task<Result> Handle(ChangeProductRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult> Handle(ChangeProductRequestModel request, CancellationToken cancellationToken)
         {
             Action<Product> changeFactory = x => { };
 
@@ -32,10 +33,10 @@ namespace API.RequestHandlers.CommandHandlers
 
             if (resp.IsSuccess)
             {
-                return Result.Ok();
+                return InnerResult.Ok();
             }
 
-            return Result.Fail(resp.Errors);
+            return InnerResult.Fail(resp.Errors, resp.StatusCode);
         }
     }
 }

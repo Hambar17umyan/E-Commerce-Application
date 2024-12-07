@@ -1,4 +1,5 @@
 ﻿using API.Data.Repositories;
+using API.Models.Control.ResultModels;
 using API.Models.Domain;
 using API.Models.Domain.Concrete;
 using API.Models.Request.Commands;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.RequestHandlers.CommandHandlers
 {
-    public class RegistrationRequestHandler : IRequestHandler<RegistrationRequestModel, Result>
+    public class RegistrationRequestHandler : IRequestHandler<RegistrationRequestModel, InnerResult>
     {
         private IUserDataService _userDataService;
         private IPasswordHashingService _passwordHashingService;
@@ -24,7 +25,7 @@ namespace API.RequestHandlers.CommandHandlers
             _roleDataService = roleDataService;
         }
 
-        public async Task<Result> Handle(RegistrationRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult> Handle(RegistrationRequestModel request, CancellationToken cancellationToken)
         {
             var user = new User()
             {

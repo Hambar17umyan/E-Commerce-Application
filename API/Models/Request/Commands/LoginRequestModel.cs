@@ -1,9 +1,10 @@
-﻿using FluentResults;
+﻿using API.Models.Control.ResultModels;
+using FluentResults;
 using MediatR;
 
 namespace API.Models.Request.Commands
 {
-    public class LoginRequestModel : IRequest<Result<string>>
+    public class LoginRequestModel : IRequest<InnerResult<string>>
     {
         public LoginRequestModel(string email, string password)
         {

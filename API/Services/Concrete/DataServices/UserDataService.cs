@@ -1,10 +1,12 @@
 ﻿using API.Data.Repositories.Concrete;
 using API.Data.Repositories.Interfaces;
+using API.Models.Control.ResultModels;
 using API.Models.Domain.Concrete;
 using API.Services.Concrete.Control;
 using API.Services.Interfaces.Control;
 using API.Services.Interfaces.DataServices;
 using FluentResults;
+using System.Net;
 
 namespace API.Services.Concrete.DataServices
 {
@@ -16,8 +18,8 @@ namespace API.Services.Concrete.DataServices
         {
             _passwordHashingService = passwordHashingService;
         }
-        public Result<User> GetByEmail(string email) => GetBy(x => x.Email == email);
-        public Result<User> Authenticate(string email, string password)
+        public InnerResult<User> GetByEmail(string email) => GetBy(x => x.Email == email);
+        public InnerResult<User> Authenticate(string email, string password)
         {
             var resp = GetByEmail(email);
 
@@ -26,29 +28,29 @@ namespace API.Services.Concrete.DataServices
                 var user = resp.Value;
                 if (_passwordHashingService.Verify(password, user.PasswordHash))
                 {
-                    return Result.Ok(user);
+                    return InnerResult<User>.Ok(user);
                 }
                 else
                 {
-                    return Result.Fail("Incorrect password!");
+                    return InnerResult<User>.Fail("Incorrect password!", HttpStatusCode.BadRequest);
                 }
             }
             else
             {
-                return Result.Fail(resp.Errors);
+                return InnerResult<User>.Fail(resp.Errors, resp.StatusCode);
             }
         }
-        public async Task<Result> RemoveAsync(string email)
+        public async Task<InnerResult> RemoveAsync(string email)
         {
             var res = GetByEmail(email);
             if (res.IsSuccess)
             {
                 await _repo.RemoveAsync(res.Value);
-                return Result.Ok();
+                return InnerResult.Ok();
             }
-            else return Result.Fail(res.Errors);
+            else return InnerResult.Fail(res.Errors, res.StatusCode);
         }
-        public async Task<Result> UpdateAsync(int id, Action<User> action) => await UpdateAsync(x => x.Id == id, action);
-        public async Task<Result> UpdateAsync(string email, Action<User> action) => await UpdateAsync(x => x.Email == email, action);
+        public async Task<InnerResult> UpdateAsync(int id, Action<User> action) => await UpdateAsync(x => x.Id == id, action);
+        public async Task<InnerResult> UpdateAsync(string email, Action<User> action) => await UpdateAsync(x => x.Email == email, action);
     }
 }

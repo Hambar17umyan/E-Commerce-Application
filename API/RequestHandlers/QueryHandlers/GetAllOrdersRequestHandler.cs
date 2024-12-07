@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Queries;
 using API.Models.Response.Output;
 using API.Services.Concrete.DataServices;
@@ -9,7 +10,7 @@ using MediatR;
 
 namespace API.RequestHandlers.QueryHandlers
 {
-    public class GetAllOrdersRequestHandler : IRequestHandler<GetAllOrdersRequestModel, Result<IEnumerable<OrderOutputModel>>>
+    public class GetAllOrdersRequestHandler : IRequestHandler<GetAllOrdersRequestModel, InnerResult<IEnumerable<OrderOutputModel>>>
     {
         private IOrderDataService _orderDataService;
         private IMapper _mapper;
@@ -20,15 +21,15 @@ namespace API.RequestHandlers.QueryHandlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<OrderOutputModel>>> Handle(GetAllOrdersRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult<IEnumerable<OrderOutputModel>>> Handle(GetAllOrdersRequestModel request, CancellationToken cancellationToken)
         {
             var res = _orderDataService.GetAll();
             if (res.IsSuccess)
             {
-                return Result.Ok(
+                return InnerResult<IEnumerable<OrderOutputModel>>.Ok(
                         _mapper.Map<IEnumerable<Order>, IEnumerable<OrderOutputModel>>(res.Value));
             }
-            return Result.Fail(res.Errors);
+            return InnerResult<IEnumerable<OrderOutputModel>>.Fail(res.Errors, res.StatusCode);
         }
     }
 }

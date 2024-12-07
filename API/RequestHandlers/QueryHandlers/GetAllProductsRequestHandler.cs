@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Queries;
 using API.Models.Response.Output;
 using API.Services.Concrete.DataServices;
@@ -9,7 +10,7 @@ using MediatR;
 
 namespace API.RequestHandlers.QueryHandlers
 {
-    public class GetAllProductsRequestHandler : IRequestHandler<GetAllProductsRequestModel, Result<IEnumerable<ProductOutputModel>>>
+    public class GetAllProductsRequestHandler : IRequestHandler<GetAllProductsRequestModel, InnerResult<IEnumerable<ProductOutputModel>>>
     {
         private IProductDataService _productDataService;
         private IMapper _mapper;
@@ -20,15 +21,15 @@ namespace API.RequestHandlers.QueryHandlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<ProductOutputModel>>> Handle(GetAllProductsRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult<IEnumerable<ProductOutputModel>>> Handle(GetAllProductsRequestModel request, CancellationToken cancellationToken)
         {
             var res = _productDataService.GetAll();
             if (res.IsSuccess)
             {
-                return Result.Ok(
+                return InnerResult<IEnumerable<ProductOutputModel>>.Ok(
                         _mapper.Map<IEnumerable<Product>, IEnumerable<ProductOutputModel>>(res.Value));
             }
-            return Result.Fail(res.Errors);
+            return InnerResult<IEnumerable<ProductOutputModel>>.Fail(res.Errors, res.StatusCode);
         }
     }
 }

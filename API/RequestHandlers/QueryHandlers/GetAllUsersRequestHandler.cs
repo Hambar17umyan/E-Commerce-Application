@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Queries;
 using API.Models.Response.Output;
 using API.Services.Concrete.DataServices;
@@ -9,7 +10,7 @@ using MediatR;
 
 namespace API.RequestHandlers.QueryHandlers
 {
-    public class GetAllUsersRequestHandler : IRequestHandler<GetAllUsersRequestModel, Result<IEnumerable<UserOutputModel>>>
+    public class GetAllUsersRequestHandler : IRequestHandler<GetAllUsersRequestModel, InnerResult<IEnumerable<UserOutputModel>>>
     {
         private IUserDataService _userDataService;
         private IMapper _mapper;
@@ -20,15 +21,15 @@ namespace API.RequestHandlers.QueryHandlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<UserOutputModel>>> Handle(GetAllUsersRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult<IEnumerable<UserOutputModel>>> Handle(GetAllUsersRequestModel request, CancellationToken cancellationToken)
         {
             var res = _userDataService.GetAll();
             if (res.IsSuccess)
             {
-                return Result.Ok(
+                return InnerResult<IEnumerable<UserOutputModel>>.Ok(
                         _mapper.Map<IEnumerable<User>, IEnumerable<UserOutputModel>>(res.Value));
             }
-            return Result.Fail(res.Errors);
+            return InnerResult<IEnumerable<UserOutputModel>>.Fail(res.Errors, res.StatusCode);
         }
     }
 }

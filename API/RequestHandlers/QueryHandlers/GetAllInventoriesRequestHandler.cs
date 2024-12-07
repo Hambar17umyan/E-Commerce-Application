@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Queries;
 using API.Models.Response.Output;
 using API.Services.Interfaces.DataServices;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace API.RequestHandlers.QueryHandlers
 {
-    public class GetAllInventoriesRequestHandler : IRequestHandler<GetAllInventoriesRequestModel, Result<IEnumerable<InventoryOutputModel>>>
+    public class GetAllInventoriesRequestHandler : IRequestHandler<GetAllInventoriesRequestModel, InnerResult<IEnumerable<InventoryOutputModel>>>
     {
         private IInventoryDataService _inventoryDataService;
         private IMapper _mapper;
@@ -18,15 +19,15 @@ namespace API.RequestHandlers.QueryHandlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<InventoryOutputModel>>> Handle(GetAllInventoriesRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult<IEnumerable<InventoryOutputModel>>> Handle(GetAllInventoriesRequestModel request, CancellationToken cancellationToken)
         {
             var res = _inventoryDataService.GetAll();
             if (res.IsSuccess)
             {
-                return Result.Ok(
-                        _mapper.Map<IEnumerable<Inventory>, IEnumerable<InventoryOutputModel>>(res.Value));
+                var ret = _mapper.Map<IEnumerable<Inventory>, IEnumerable<InventoryOutputModel>>(res.Value);
+                return InnerResult<IEnumerable<InventoryOutputModel>>.Ok(ret);
             }
-            return Result.Fail(res.Errors);
+            return InnerResult<IEnumerable<InventoryOutputModel>>.Fail(res.Errors, res.StatusCode);
         }
     }
 }

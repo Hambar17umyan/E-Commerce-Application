@@ -1,8 +1,10 @@
 ﻿using API.Data.Db;
 using API.Data.Repositories.Interfaces;
+using API.Models.Control.ResultModels;
 using API.Models.Domain.Interfaces;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace API.Data.Repositories.Concrete
 {
@@ -16,35 +18,35 @@ namespace API.Data.Repositories.Concrete
             _dbSet = dbSet;
         }
 
-        public virtual async Task<Result> AddAsync(T entity)
+        public virtual async Task<InnerResult> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
-            return Result.Ok();
+            return InnerResult.Ok();
         }
         public virtual IEnumerable<T> GetAll() => _dbSet.AsEnumerable();
-        public virtual Result<T> GetBy(Func<T, bool> predicate)
+        public virtual InnerResult<T> GetBy(Func<T, bool> predicate)
         {
             var res = GetAll().FirstOrDefault(x => predicate(x));
             if (res is null)
-                return Result.Fail($"{typeof(T).Name} not found!");
+                return InnerResult<T>.Fail($"{typeof(T).Name} not found!", HttpStatusCode.BadRequest);
             return res;
         }
-        public virtual async Task<Result> RemoveAsync(T entity)
+        public virtual async Task<InnerResult> RemoveAsync(T entity)
         {
             var resp = GetBy(x => x.Id == entity.Id);
             if (resp.IsSuccess)
             {
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
-                return Result.Ok();
+                return InnerResult.Ok();
             }
             else
             {
-                return Result.Fail(resp.Errors);
+                return InnerResult.Fail(resp.Errors, resp.StatusCode);
             }
         }
-        public virtual async Task<Result> UpdateAsync(Func<T, bool> predicate, Action<T> action)
+        public virtual async Task<InnerResult> UpdateAsync(Func<T, bool> predicate, Action<T> action)
         {
             var resp = GetBy(predicate);
             if (resp.IsSuccess)
@@ -55,14 +57,14 @@ namespace API.Data.Repositories.Concrete
                 }
                 catch (Exception ex)
                 {
-                    return Result.Fail("Exception was thrown! Here is the message:\n" + ex.Message);
+                    return InnerResult.Fail("Exception was thrown! Here is the message:\n" + ex.Message);
                 }
                 await _context.SaveChangesAsync();
-                return Result.Ok();
+                return InnerResult.Ok();
             }
             else
             {
-                return Result.Fail(resp.Errors);
+                return InnerResult.Fail(resp.Errors, resp.StatusCode);
             }
 
         }

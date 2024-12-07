@@ -1,4 +1,5 @@
-﻿using API.Models.Domain.Concrete;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Domain.Concrete;
 using API.Models.Request.Commands;
 using API.Services.Interfaces.DataServices;
 using FluentResults;
@@ -6,7 +7,7 @@ using MediatR;
 
 namespace API.RequestHandlers.CommandHandlers
 {
-    public class AddProductRequestHandler : IRequestHandler<AddProductRequestModel, Result>
+    public class AddProductRequestHandler : IRequestHandler<AddProductRequestModel, InnerResult>
     {
         private IInventoryDataService _inventoryDataService;
 
@@ -15,7 +16,7 @@ namespace API.RequestHandlers.CommandHandlers
             _inventoryDataService = inventoryDataService;
         }
 
-        public async Task<Result> Handle(AddProductRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult> Handle(AddProductRequestModel request, CancellationToken cancellationToken)
         {
             Product product = new()
             {
@@ -33,11 +34,11 @@ namespace API.RequestHandlers.CommandHandlers
 
             if (res.IsSuccess)
             {
-                return Result.Ok();
+                return InnerResult.Ok();
             }
             else
             {
-                return Result.Fail(res.Errors);
+                return InnerResult.Fail(res.Errors, res.StatusCode);
             }
         }
     }

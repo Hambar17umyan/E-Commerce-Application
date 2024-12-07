@@ -1,14 +1,16 @@
-﻿using API.Models.Request.Commands;
+﻿using API.Models.Control.ResultModels;
+using API.Models.Request.Commands;
 using API.Services.Concrete.Control;
 using API.Services.Concrete.DataServices;
 using API.Services.Interfaces.Control;
 using API.Services.Interfaces.DataServices;
 using FluentResults;
 using MediatR;
+using System.Net;
 
 namespace API.RequestHandlers.CommandHandlers
 {
-    public class LoginRequestHandler : IRequestHandler<LoginRequestModel, Result<string>>
+    public class LoginRequestHandler : IRequestHandler<LoginRequestModel, InnerResult<string>>
     {
         private IUserDataService _userDataService;
         private IJwtService _jwtService;
@@ -20,7 +22,7 @@ namespace API.RequestHandlers.CommandHandlers
             _passwordHashingService = passwordHashingService;
         }
 
-        public async Task<Result<string>> Handle(LoginRequestModel request, CancellationToken cancellationToken)
+        public async Task<InnerResult<string>> Handle(LoginRequestModel request, CancellationToken cancellationToken)
         {
 
             var resp = _userDataService.GetByEmail(request.Email);
@@ -30,16 +32,16 @@ namespace API.RequestHandlers.CommandHandlers
                 if (_passwordHashingService.Verify(request.Password, user.PasswordHash))
                 {
                     var token = _jwtService.Generate(user);
-                    return Result.Ok(token);
+                    return InnerResult<string>.Ok(token);
                 }
                 else
                 {
-                    return Result.Fail("Incorrect password!");
+                    return InnerResult<string>.Fail("Incorrect password!", HttpStatusCode.BadRequest);
                 }
             }
             else
             {
-                return Result.Fail(resp.Errors.First());
+                return InnerResult<string>.Fail(resp.Errors.First(), resp.StatusCode);
             }
         }
     }

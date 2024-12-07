@@ -1,10 +1,11 @@
-﻿using FluentResults;
+﻿using API.Models.Control.ResultModels;
+using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Models.Request.Commands
 {
-    public class RegistrationRequestModel : IRequest<Result>
+    public class RegistrationRequestModel : IRequest<InnerResult>
     {
         public RegistrationRequestModel(string firstName, string lastName, string email, string password)
         {

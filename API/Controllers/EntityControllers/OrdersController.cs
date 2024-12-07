@@ -27,7 +27,7 @@ namespace API.Controllers.EntityControllers
             {
                 return Ok(res.Value);
             }
-            return BadRequest(res.Errors.Select(x => x.Message));
+            return StatusCode(500, res.Errors.Select(x => x.Message));
         }
         #endregion
     }
