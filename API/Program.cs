@@ -1,3 +1,4 @@
+using API.AutoMapperProfiles;
 using API.Behaviors;
 using API.Controllers;
 using API.Data.Db;
@@ -38,6 +39,7 @@ namespace API
             ConfigureMediatR(builder);
             ConfigureServices(builder);
             ConfigureValidators(builder);
+            ConfigureAutoMappers(builder);
 
             var app = builder.Build();
 
@@ -114,6 +116,19 @@ namespace API
                 options.AddPolicy("AdminPolicy", policy =>
                     policy.RequireRole("Admin", "SuperAdmin"));
             });
+        }
+        private static IServiceCollection ConfigureAutoMappers(WebApplicationBuilder builder)
+        {
+            return builder.Services.AddAutoMapper(
+                typeof(CartItemProfile),
+                typeof(CartProfile),
+                typeof(InventoryProfile),
+                typeof(OrderProfile),
+                typeof(ProductProfile),
+                typeof(RoleProfile),
+                typeof(UserProfile),
+                typeof(LineItemProfile)
+                );
         }
     }
 }

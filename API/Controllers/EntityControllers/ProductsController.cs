@@ -42,7 +42,7 @@ namespace API.Controllers.EntityControllers
             {
                 return Ok();
             }
-            return StatusCode(500, res.Errors);
+            return BadRequest(500, res.Errors);
         }
         #endregion
         #region Put
@@ -56,7 +56,7 @@ namespace API.Controllers.EntityControllers
             {
                 return Ok();
             }
-            return StatusCode(500, res.Errors);
+            return BadRequest(res.Errors.Select(x => x.Message));
         }
         #endregion
     }
