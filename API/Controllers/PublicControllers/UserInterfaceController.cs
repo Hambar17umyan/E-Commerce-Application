@@ -78,6 +78,19 @@ namespace API.Controllers.PublicControllers
             return StatusCode((int)res.StatusCode, res.Errors);
         }
 
+        [HttpPost]
+        [Route("orders/new")]
+        public async Task<IActionResult> CreateNewOrderAsync(CreateNewOrderRequestModel request)
+        {
+            request.User = User;
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok(res.Value);
+            }
+            return StatusCode((int)res.StatusCode, res.Errors);
+        }
+
         #endregion
     }
 }

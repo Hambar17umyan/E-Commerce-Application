@@ -77,7 +77,8 @@ namespace API
                 .AddScoped<IJwtService, JwtService>()
                 .AddScoped<IPasswordHashingService, PasswordHashingService>()
                 .AddScoped<ICartControllerService, CartControllerService>()
-                .AddScoped<IUserRetrieverService, UserRetrieverService>();
+                .AddScoped<IUserRetrieverService, UserRetrieverService>()
+                .AddScoped<IOrderCreationService, OrderCreationService>();
         }
         private static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
         {

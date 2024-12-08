@@ -16,15 +16,27 @@ namespace API.Data.Repositories.Concrete
                 .AsEnumerable();
         }
         public InventoryDataRepository(ECommerceDbContext context) : base(context, context.Inventories) { }
-        public async Task<InnerResult> DecreaseQuantityAsync(int id, int numberOfOldItems) => await IncreaseQuantityAsync(id, -numberOfOldItems);
-        public Task<InnerResult> DecreaseQuantityAsync(Product product, int numberOfOldItems)
+        public async Task<InnerResult> DecreaseQuantityAsync(int id, int numberOfOldItems)
         {
-            return DecreaseQuantityAsync(product.Id, numberOfOldItems);
+            var resp = GetById(id);
+            if (resp.IsSuccess)
+            {
+                if (resp.Value.Quantity < numberOfOldItems)
+                    return InnerResult.Fail("The number of inventories is less then specified!", System.Net.HttpStatusCode.Conflict);
+                resp.Value.Quantity -= numberOfOldItems;
+                await _context.SaveChangesAsync();
+                return InnerResult.Ok();
+            }
+            else
+            {
+                return InnerResult.Fail(resp.Errors, resp.StatusCode);
+            }
         }
+        public Task<InnerResult> DecreaseQuantityAsync(Product product, int numberOfOldItems) => DecreaseQuantityAsync(product.Id, numberOfOldItems);
         public async Task<InnerResult> IncreaseQuantityAsync(int id, int numberOfNewItems)
         {
             var resp = GetBy(x => x.Id == id);
-            if(resp.IsSuccess)
+            if (resp.IsSuccess)
             {
                 resp.Value.Quantity += numberOfNewItems;
                 await _context.SaveChangesAsync();

@@ -35,17 +35,7 @@ namespace API.Controllers.ManagementControllers
             return StatusCode(500, res.Errors);
         }
 
-        [HttpPut]
-        [Route("inventory/changequantity")]
-        public async Task<IActionResult> ChangeInventoryQuantityManualAsync(ChangeInventoryQuantityManualRequestModel request)
-        {
-            var res = await _mediator.Send(request);
-            if (res.IsSuccess)
-            {
-                return Ok();
-            }
-            return StatusCode(500, res.Errors);
-        }
+        
         #endregion
     }
 }

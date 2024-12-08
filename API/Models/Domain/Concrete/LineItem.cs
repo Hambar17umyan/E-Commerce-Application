@@ -21,5 +21,15 @@ namespace API.Models.Domain.Concrete
 
             }
         }
+
+        public static implicit operator LineItem(CartItem cartItem)
+        {
+            return new()
+            {
+                Product = cartItem.Product,
+                Quantity = cartItem.Quantity,
+                ProductId = cartItem.ProductId,
+            };
+        }
     }
 }
