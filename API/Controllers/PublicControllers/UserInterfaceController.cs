@@ -24,11 +24,11 @@ namespace API.Controllers.PublicControllers
 
         [HttpGet]
         [Route("cart/data")]
-        public async Task<IActionResult> GetCartAsync([FromQuery]GetCartRequestModel request)
+        public async Task<IActionResult> GetCartAsync([FromQuery] GetCartRequestModel request)
         {
             request.User = User;
             var res = await _mediator.Send(request);
-            if(res.IsSuccess)
+            if (res.IsSuccess)
             {
                 return Ok(res.Value);
             }
@@ -37,7 +37,7 @@ namespace API.Controllers.PublicControllers
 
         [HttpGet]
         [Route("orders/")]
-        public async Task<IActionResult> GetOrderHistoryAsync([FromQuery]GetOrderHistoryRequestModel request)
+        public async Task<IActionResult> GetOrderHistoryAsync([FromQuery] GetOrderHistoryRequestModel request)
         {
             request.User = User;
             var res = await _mediator.Send(request);
@@ -55,6 +55,19 @@ namespace API.Controllers.PublicControllers
         [HttpPost]
         [Route("cart/add")]
         public async Task<IActionResult> AddProductToCartAsync(AddProductToCartRequestModel request)
+        {
+            request.User = User;
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok();
+            }
+            return StatusCode((int)res.StatusCode, res.Errors);
+        }
+
+        [HttpPost]
+        [Route("cart/remove")]
+        public async Task<IActionResult> RemoveProductFromCartAsync(RemoveProductFromCartRequestModel request)
         {
             request.User = User;
             var res = await _mediator.Send(request);
