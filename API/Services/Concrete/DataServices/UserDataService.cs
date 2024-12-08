@@ -58,13 +58,6 @@ namespace API.Services.Concrete.DataServices
         public async Task<InnerResult> UpdateAsync(string email, Action<User> action) => await UpdateAsync(x => x.Email == email, action);
 
 
-        /// <summary>
-        /// Adds a specified number of specified product to user's cart.
-        /// </summary>
-        /// <param name="userId">The id of user.</param>
-        /// <param name="productId">The id of product.</param>
-        /// <param name="quantity">The number of products.</param>
-        /// <returns>A task that represents the asynchronous operation, returning an <see cref="InnerResult"/>.</returns>
         public async Task<InnerResult> AddToCartAsync(int userId, int productId, int quantity)
         {
             //Edge case
@@ -75,14 +68,6 @@ namespace API.Services.Concrete.DataServices
             else
                 return InnerResult.Fail(productResp.Errors, productResp.StatusCode);
         }
-
-        /// <summary>
-        /// Adds a specified number of specified product to user's cart.
-        /// </summary>
-        /// <param name="userId">The id of user.</param>
-        /// <param name="product">The product.</param>
-        /// <param name="quantity">The number of products.</param>
-        /// <returns>A task that represents the asynchronous operation, returning an <see cref="InnerResult"/>.</returns>
         public async Task<InnerResult> AddToCartAsync(int id, Product product, int quantity)
         {
             var userResp = GetById(id);
@@ -93,6 +78,29 @@ namespace API.Services.Concrete.DataServices
             var cart = user.Cart;
 
             return await _cartDataRepository.AddToCartAsync(cart.Id, product, quantity);
+        }
+
+        public async Task<InnerResult> RemoveFromCartAsync(int userId, int productId, int? quantity)
+        {
+            //Edge case
+            var productResp = _productDataRepository.GetById(productId);
+
+            if (productResp.IsSuccess)
+                return await RemoveFromCartAsync(userId, productResp.Value, quantity);
+            else
+                return InnerResult.Fail(productResp.Errors, productResp.StatusCode);
+        }
+
+        public async Task<InnerResult> RemoveFromCartAsync(int userId, Product product, int? quantity)
+        {
+            var userResp = GetById(userId);
+            if (userResp.IsFailed)
+                return InnerResult.Fail(userResp.Errors, userResp.StatusCode);
+
+            var user = userResp.Value;
+            var cart = user.Cart;
+
+            return await _cartDataRepository.RemoveFromCartAsync(cart.Id, product, quantity);
         }
     }
 }
