@@ -20,7 +20,7 @@ namespace API.Data.Repositories.Concrete
         public async Task<InnerResult> AddToCartAsync(int cartId, Product product, int quantity)
         {
             var cartResp = GetById(cartId);
-
+            
             //Edge Case
             if (cartResp.IsFailed)
             {
@@ -55,7 +55,7 @@ namespace API.Data.Repositories.Concrete
         /// </summary>
         /// <param name="cartId">The id of cart.</param>
         /// <param name="product">The product that needs to be added.</param>
-        /// <param name="quantity">The number of products that need to be removed. If <c>null</c>, the entire cart item will be removed.</param>
+        /// <param name="quantity">The number of products that need to be added. If <c>null</c>, the entire cart item will be removed.</param>
         /// <returns>A task that represents the asynchronous operation, returning an <see cref="InnerResult"/>.</returns>
         public async Task<InnerResult> RemoveFromCartAsync(int cartId, Product product, int? quantity = null)
         {
@@ -74,22 +74,9 @@ namespace API.Data.Repositories.Concrete
                 {
                     if (item.Product == product)
                     {
-                        if (item.Quantity > quantity)
+                        if (item.Quantity >= quantity)
                         {
                             item.Quantity -= quantity.Value;
-                            await _context.SaveChangesAsync();
-                            return InnerResult.Ok();
-                        }
-                        else if (item.Quantity == quantity)
-                        {
-                            var list = cart.Items.
-                                Where(x => x.Product != product)
-                                .ToList();
-
-                            if (list.Count == cart.Items.Count)
-                                return InnerResult.Fail("Cart doesn't contain that product!", HttpStatusCode.BadRequest);
-
-                            cart.Items = list;
                             await _context.SaveChangesAsync();
                             return InnerResult.Ok();
                         }

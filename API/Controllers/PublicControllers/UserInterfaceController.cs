@@ -65,19 +65,6 @@ namespace API.Controllers.PublicControllers
             return StatusCode((int)res.StatusCode, res.Errors);
         }
 
-        [HttpPost]
-        [Route("cart/remove")]
-        public async Task<IActionResult> RemoveProductFromCartAsync(RemoveProductFromCartRequestModel request)
-        {
-            request.User = User;
-            var res = await _mediator.Send(request);
-            if (res.IsSuccess)
-            {
-                return Ok();
-            }
-            return StatusCode((int)res.StatusCode, res.Errors);
-        }
-
         #endregion
     }
 }
