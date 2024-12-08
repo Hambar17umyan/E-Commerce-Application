@@ -1,4 +1,5 @@
-﻿using FluentResults;
+﻿using API.Models.Control.ResultModels;
+using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -8,7 +9,7 @@ namespace API.Behaviors
     public class ValidationPipelineBehavior<TRequest, TResponse>
         : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
-        where TResponse : Result
+        where TResponse : InnerResult
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -27,7 +28,7 @@ namespace API.Behaviors
                 var res = validator.Validate(request);
                 if (!res.IsValid)
                 {
-                    return Result.Fail(res.Errors.First().ToString()) as TResponse;
+                    return InnerResult.Fail(res.Errors.First().ToString()) as TResponse;
                 }
             }
 

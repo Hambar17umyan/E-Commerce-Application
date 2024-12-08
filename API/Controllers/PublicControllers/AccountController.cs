@@ -21,7 +21,7 @@ namespace API.Controllers.PublicControllers
         public async Task<IActionResult> RegisterAsync(RegistrationRequestModel request)
         {
             var res = await _mediator.Send(request);
-            return res.IsSuccess ?
+            return res?.IsSuccess ?? false ?
                 Ok() :
                 BadRequest(res.Errors[0].Message);
         }
