@@ -5,7 +5,6 @@ namespace API.Models.Domain.Concrete
     public class LineItem : IDomain
     {
         public int Id { get; set; }
-        public Order Order { get; set; }
         public int OrderId { get; set; }
         public Product Product { get; set; }
         public int? ProductId { get; set; }

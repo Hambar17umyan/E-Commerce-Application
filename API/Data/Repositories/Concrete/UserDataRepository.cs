@@ -15,6 +15,8 @@ namespace API.Data.Repositories.Concrete
         {
             return _dbSet.Include(x => x.Roles)
                 .Include(x => x.Cart)
+                .ThenInclude(x=>x.Items)
+                .ThenInclude(x=>x.Product)
                 .Include(x => x.Orders)
                 .ThenInclude(x => x.LineItems)
                 .ThenInclude(x => x.Product)

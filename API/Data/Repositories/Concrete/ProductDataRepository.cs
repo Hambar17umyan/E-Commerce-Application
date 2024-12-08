@@ -3,6 +3,7 @@ using API.Data.Repositories.Interfaces;
 using API.Models.Control.ResultModels;
 using API.Models.Domain.Concrete;
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Repositories.Concrete
 {

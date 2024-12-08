@@ -3,7 +3,6 @@
     public class LineItemOutputModel
     {
         public int Id { get; set; }
-        public OrderOutputModel Order { get; set; }
         public int OrderId { get; set; }
         public ProductOutputModel Product { get; set; }
         public int? ProductId { get; set; }

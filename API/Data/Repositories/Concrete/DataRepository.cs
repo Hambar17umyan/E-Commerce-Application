@@ -32,6 +32,7 @@ namespace API.Data.Repositories.Concrete
                 return InnerResult<T>.Fail($"{typeof(T).Name} not found!", HttpStatusCode.BadRequest);
             return res;
         }
+        public virtual InnerResult<T> GetById(int id) => GetBy(x => x.Id == id);
         public virtual async Task<InnerResult> RemoveAsync(T entity)
         {
             var resp = GetBy(x => x.Id == entity.Id);

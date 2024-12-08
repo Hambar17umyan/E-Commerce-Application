@@ -26,7 +26,7 @@ namespace API.Data.Db
                 cb.Property(c => c.Id).ValueGeneratedOnAdd();
 
                 cb.HasMany(c => c.Items)
-                .WithOne(ci => ci.Cart)
+                .WithOne()
                 .HasForeignKey(ci => ci.CartId)
                 .OnDelete(DeleteBehavior.Cascade);
             });
@@ -58,11 +58,6 @@ namespace API.Data.Db
                 lib.HasKey(li => li.Id);
                 lib.Property(li => li.Id).ValueGeneratedOnAdd();
 
-                lib.HasOne(li => li.Order)
-                .WithMany(o => o.LineItems)
-                .HasForeignKey(li => li.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
                 lib.HasOne(li => li.Product)
                 .WithMany()
                 .HasForeignKey(li => li.ProductId)
@@ -74,9 +69,9 @@ namespace API.Data.Db
                 ob.HasKey(o => o.Id);
                 ob.Property(o => o.Id).ValueGeneratedOnAdd();
 
-                ob.HasOne(o => o.User)
-                .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.UserId)
+                ob.HasMany(o => o.LineItems)
+                .WithOne()
+                .HasForeignKey(li => li.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -109,6 +104,11 @@ namespace API.Data.Db
                     .WithMany()
                     .HasForeignKey("UserId")
                 );
+
+                ub.HasMany(u => u.Orders)
+                .WithOne()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 ub.HasOne(u => u.Cart)
                 .WithOne()

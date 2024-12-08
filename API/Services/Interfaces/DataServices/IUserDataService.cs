@@ -11,6 +11,7 @@ namespace API.Services.Interfaces.DataServices
         public Task<InnerResult> RemoveAsync(string email);
         public Task<InnerResult> UpdateAsync(int id, Action<User> action);
         public Task<InnerResult> UpdateAsync(string email, Action<User> action);
-
+        public Task<InnerResult> AddToCartAsync(int id, Product product, int quantity);
+        public Task<InnerResult> AddToCartAsync(int userId, int productId, int quantity);
     }
 }

@@ -9,7 +9,6 @@ namespace API.AutoMapperProfiles
         public CartItemProfile()
         {
             CreateMap<CartItem, CartItemOutputModel>()
-                .ForMember(dest => dest.Cart, opt => opt.MapFrom(src => src.Cart))
                 .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product));
 
 

@@ -14,7 +14,7 @@ namespace API.Models.Domain.Concrete
         public bool IsActive { get; set; }
         public ICollection<Role> Roles { get; set; }
         public ICollection<Order> Orders { get; set; }
-        public Cart Cart { get; set; } = null;
+        public Cart Cart { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using API.Models.Domain.Interfaces;
+using System.Text.Json.Serialization;
 
 namespace API.Models.Domain.Concrete
 {
@@ -21,7 +22,8 @@ namespace API.Models.Domain.Concrete
 
             }
         }
-        public Cart Cart { get; set; }
+
         public int CartId { get; set; }
+
     }
 }

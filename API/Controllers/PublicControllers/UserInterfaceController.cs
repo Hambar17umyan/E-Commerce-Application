@@ -1,4 +1,5 @@
-﻿using API.Models.Request.Queries;
+﻿using API.Models.Request.Commands;
+using API.Models.Request.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,22 +23,47 @@ namespace API.Controllers.PublicControllers
         #region Get
 
         [HttpGet]
-        public async Task<IActionResult> GetCartAsync(GetCartRequestModel request)
+        [Route("cart/data")]
+        public async Task<IActionResult> GetCartAsync([FromQuery]GetCartRequestModel request)
         {
+            request.User = User;
             var res = await _mediator.Send(request);
             if(res.IsSuccess)
             {
                 return Ok(res.Value);
             }
-            return BadRequest(res.Errors);
+            return StatusCode((int)res.StatusCode, res.Errors);
         }
 
-        //[HttpGet]
-        //public IActionResult GetOrderHistory(GetOrderHistoryRequestModel request)
-        //{
+        [HttpGet]
+        [Route("orders/")]
+        public async Task<IActionResult> GetOrderHistoryAsync([FromQuery]GetOrderHistoryRequestModel request)
+        {
+            request.User = User;
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok(res.Value);
+            }
+            return StatusCode((int)res.StatusCode, res.Errors);
+        }
 
-        //}
+        #endregion
 
+        #region Post
+
+        [HttpPost]
+        [Route("cart/add")]
+        public async Task<IActionResult> AddProductToCartAsync(AddProductToCartRequestModel request)
+        {
+            request.User = User;
+            var res = await _mediator.Send(request);
+            if (res.IsSuccess)
+            {
+                return Ok();
+            }
+            return StatusCode((int)res.StatusCode, res.Errors);
+        }
 
         #endregion
     }

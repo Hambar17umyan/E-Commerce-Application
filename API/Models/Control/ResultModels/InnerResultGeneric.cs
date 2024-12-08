@@ -63,5 +63,10 @@ namespace API.Models.Control.ResultModels
             res.StatusCode = status;
             return res;
         }
+
+        public static implicit operator TResult(InnerResult<TResult> result)
+        {
+            return result.Value;
+        }
     }
 }

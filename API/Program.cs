@@ -71,10 +71,13 @@ namespace API
                 .AddScoped<IInventoryDataRepository, InventoryDataRepository>()
                 .AddScoped<IOrderDataRepository, OrderDataRepository>()
                 .AddScoped<IProductDataRepository, ProductDataRepository>()
+                .AddScoped<ICartDataRepository, CartDataRepository>()
                 .AddScoped<IRoleDataRepository, RoleDataRepository>()
                 .AddScoped<IUserDataRepository, UserDataRepository>()
                 .AddScoped<IJwtService, JwtService>()
-                .AddScoped<IPasswordHashingService, PasswordHashingService>();
+                .AddScoped<IPasswordHashingService, PasswordHashingService>()
+                .AddScoped<ICartControllerService, CartControllerService>()
+                .AddScoped<IUserRetrieverService, UserRetrieverService>();
         }
         private static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
         {
