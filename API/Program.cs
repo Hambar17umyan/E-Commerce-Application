@@ -78,7 +78,9 @@ namespace API
                 .AddScoped<IPasswordHashingService, PasswordHashingService>()
                 .AddScoped<ICartControllerService, CartControllerService>()
                 .AddScoped<IUserRetrieverService, UserRetrieverService>()
-                .AddScoped<IOrderCreationService, OrderCreationService>();
+                .AddScoped<IOrderCreationService, OrderCreationService>()
+                .AddScoped<IEmailService, EmailService>()
+                .AddScoped<IPdfService, PdfService>();
         }
         private static IServiceCollection ConfigureMediatR(WebApplicationBuilder builder)
         {
