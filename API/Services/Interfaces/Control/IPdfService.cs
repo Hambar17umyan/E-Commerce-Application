@@ -7,6 +7,6 @@ namespace API.Services.Interfaces.Control
 {
     public interface IPdfService
     {
-        public byte[] GenerateOrderPdf(Order order);
+        byte[] GenerateOrderPdf(Order order);
     }
 }

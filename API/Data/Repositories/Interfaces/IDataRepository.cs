@@ -11,5 +11,6 @@ namespace API.Data.Repositories.Interfaces
         public Task<InnerResult> RemoveAsync(T entity);
         public Task<InnerResult> UpdateAsync(Func<T, bool> predicate, Action<T> action);
         public InnerResult<T> GetById(int id);
+        public IEnumerable<T> GetAllWithQuery(Func<IQueryable<T>, IQueryable<T>> query);
     }
 }

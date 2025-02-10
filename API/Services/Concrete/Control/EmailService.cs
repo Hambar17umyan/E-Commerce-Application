@@ -26,7 +26,6 @@ namespace API.Services.Concrete.Control
         }
         public async Task SendEmailAsync(EmailModel email)
         {
-
             using var client = new SmtpClient(_smtpServer, _port)
             {
                 Credentials = new NetworkCredential(_senderEmail, _password),
@@ -42,14 +41,15 @@ namespace API.Services.Concrete.Control
             };
             mailMessage.To.Add(email.Email);
 
-            
+            var attachment = email.Attachments.First();
+            using (var memoryStream = new MemoryStream(attachment.Data))
+            {
+                var att = new Attachment(memoryStream, attachment.Name);
+                mailMessage.Attachments.Add(att);
 
-            //using var attachmentStream = new StreamReader(new MemoryStream(i.Data));
-            //var attachment = new Attachment(attachmentStream.BaseStream, i.Name, "application/pdf");
-            //mailMessage.Attachments.Add(attachment);
-
-            
-            await client.SendMailAsync(mailMessage);
+                await client.SendMailAsync(mailMessage);
+            }
         }
+
     }
 }

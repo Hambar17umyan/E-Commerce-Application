@@ -4,6 +4,7 @@ using API.Models.Control.ResultModels;
 using API.Models.Domain.Interfaces;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Net;
 
 namespace API.Data.Repositories.Concrete
@@ -25,6 +26,12 @@ namespace API.Data.Repositories.Concrete
             return InnerResult.Ok();
         }
         public virtual IEnumerable<T> GetAll() => _dbSet.AsEnumerable();
+
+        public IEnumerable<T> GetAllWithQuery(Func<IQueryable<T>, IQueryable<T>> query)
+        {
+        //    return query(_dbSet).AsEnumerable();
+        }
+
         public virtual InnerResult<T> GetBy(Func<T, bool> predicate)
         {
             var res = GetAll().FirstOrDefault(x => predicate(x));

@@ -73,23 +73,24 @@ namespace API.Services.Concrete.Control
             cart.Items.Clear();
             user.Orders.Add(order);
 
-            //var attachmentBytes = _pdfService.GenerateOrderPdf(order);
-            //var attachment = new EmailAttachment()
-            //{
-            //    Data = attachmentBytes,
-            //    Name = $"Order_{order.Id}.pdf"
-            //};
-
             var email = new EmailModel()
             {
                 Email = user.Email,
                 Attachments = new List<EmailAttachment>()
                 {
-
+                    new EmailAttachment()
+                    {
+                        Data = _pdfService.GenerateOrderPdf(order),
+                        Name = $"Order_{order.Id}_Documentation.pdf"
+                    },
                 },
                 Subject = $"Order N{order.Id} Confirmation",
                 BodyText =
-                $"Dear {user.FirstName} {user.LastName},\n\nThank you for your recent order! We are excited to serve you and provide you with the best experience possible.\n\nYour order has been successfully created and is being processed. Below, you can find the details of your order. Please check the attached PDF document for a summary of your purchase.\n\nIf you have any questions or require assistance, feel free to reply to this email or contact our support team.\n\nBest regards,\nThe Debed Team"
+                $"<p><b>Dear {user.FirstName} {user.LastName},</b></p>" +
+                $"<p>Thank you for your recent order! We are excited to serve you and provide you with the best experience possible.</p><br>" +
+                $"<p>Your order has been successfully created and is being processed. Below, you can find the details of your order. Please check the attached PDF document for a summary of your purchase.</p><br>" +
+                $"<p>If you have any questions or require assistance, feel free to reply to this email or contact our support team.</p><br>" +
+                $"<b><p>Best regards,</p><p>The Debed Team</p></b>"
             };
 
             await _emailService.SendEmailAsync(email);
